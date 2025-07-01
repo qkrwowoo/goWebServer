@@ -41,10 +41,10 @@ func init() {
 func main() {
 	checkArg()
 
-	c.Logging.Write(c.LogALL, "=================================================")
-	c.Logging.Write(c.LogALL, "\t [%s] START", os.Args[0])
-	c.Logging.Write(c.LogALL, "=================================================")
 	grpcHandler.IPADDR = *s_ip + ":" + *s_port
+	c.Logging.Write(c.LogALL, "=================================================")
+	c.Logging.Write(c.LogALL, "\t [%s] START [%s]", os.Args[0], grpcHandler.IPADDR)
+	c.Logging.Write(c.LogALL, "=================================================")
 	r := gin.Default()
 	if releaseMode {
 		gin.SetMode(gin.ReleaseMode)
@@ -144,6 +144,7 @@ func init_config() {
 		c.CFG["LOG"]["NAME"].(string),
 		encyn,
 		c.CFG["LOG"]["LEVEL"].(string))
+	c.Logging.Print_Config(c.CFG)
 }
 
 func check_Config(wg *sync.WaitGroup) {

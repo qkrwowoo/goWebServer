@@ -44,7 +44,7 @@ func main() {
 	time.Sleep(500 * time.Millisecond) // DB접속 완료까지 잠깐 대기
 
 	c.Logging.Write(c.LogALL, "=================================================")
-	c.Logging.Write(c.LogALL, "\t [%s] START", os.Args[0])
+	c.Logging.Write(c.LogALL, "\t [%s] START [%s]", os.Args[0], *s_port)
 	c.Logging.Write(c.LogALL, "=================================================")
 	lis, err := net.Listen("tcp", grpcListenPort)
 	if err != nil {
@@ -116,8 +116,6 @@ func checkArg(wg *sync.WaitGroup) string {
 }
 
 func init_config() {
-	*s_port = c.CFG["COMMON"]["PORT"].(string)
-
 	var encyn bool
 	if strings.ToLower(c.CFG["LOG"]["ENCYN"].(string)) == "y" {
 		encyn = true
