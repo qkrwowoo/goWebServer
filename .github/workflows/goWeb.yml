@@ -29,6 +29,6 @@ jobs:
             sh -x build.sh goWeb 2>&1
             sh -x build.sh grpcWeb 2>&1
             
-            cd ../
             ./goWeb/goWeb -f ./goWeb/goWeb.ini > ./output.log 2>&1 &
             ./grpcWeb/grpcWeb -f ./grpcWeb/grpcWeb.ini > ./output.log 2>&1 &
+
