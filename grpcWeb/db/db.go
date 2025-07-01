@@ -3,10 +3,8 @@ package db
 import (
 	"context"
 	"database/sql"
-	"errors"
 	"fmt"
 	"strings"
-	"sync"
 	"time"
 
 	c "local/common"
@@ -14,16 +12,17 @@ import (
 	"github.com/go-redis/redis/v8"
 )
 
+type ConnInfo struct {
+	connQueue c.Queue
+	Thread    int
+	Timeout   int
+	duration  time.Duration
+	Ctx       context.Context
+}
+
 type DBinfo struct {
-	Mutex        sync.Mutex
-	Open         func(db *DBinfo) (interface{}, error)
-	AllOpen      func(db *DBinfo) error
-	Conn         []*sql.DB
-	RedisConn    []*redis.Client
-	connQueue    c.Queue
-	Thread       int
-	Timeout      int
-	duration     time.Duration
+	Open         func(DBinfo, *context.Context) (interface{}, error)
+	AllOpen      func(interface{}) error
 	dbtype       string
 	connectQuery string
 	ID           string
@@ -47,60 +46,82 @@ type column struct {
 	Type string
 }
 
+var RDB rdb
+var REDIS my_redis
+
 func init() {
-	MySQL.MySQL_default()
-	//MsSQL.MsSQL_default()
-	//Oracle.Oracle_default()
-	Redis.Redis_default()
+	RDB.Default("mysql")
+	REDIS.Default()
 }
 
-func (db *DBinfo) Init(dbType string) {
-	if c.CFG[dbType] == nil {
-		c.Logging.Write(c.LogWARN, "Not Found DB Section [%s] in configure file", dbType)
-		return
-	}
-	db.AllClose()
-	db.connQueue.Clear()
-	db.connQueue.CreateQ()
-	db.dbtype = strings.ToLower(dbType)
-	if c.CFG[dbType]["CONNECT"] != nil && len(c.CFG[dbType]["CONNECT"].(string)) > 0 {
-		db.connectQuery = c.CFG[dbType]["CONNECT"].(string)
-	}
-	db.ID = c.CFG[dbType]["ID"].(string)
-	db.PW = c.CFG[dbType]["PW"].(string)
-	db.SID = c.CFG[dbType]["SID"].(string)
-	db.ip = c.CFG[dbType]["IP"].(string)
-	db.port = c.CFG[dbType]["PORT"].(string)
-	db.Ipaddr = db.ip + ":" + db.port
-	db.Timeout = c.S_Atoi(c.CFG[dbType]["TIMEOUT"].(string))
-	db.duration = time.Duration(db.Timeout) * time.Millisecond
-	db.Thread = c.S_Atoi(c.CFG[dbType]["THREAD"].(string))
-	db.Conn = make([]*sql.DB, db.Thread)
-	db.RedisConn = make([]*redis.Client, db.Thread)
-	db.AllOpen(db)
+func (conninfo *ConnInfo) init() {
+	conninfo.Timeout = c.S_Atoi(c.CFG["DB"]["TIMEOUT"].(string))
+	conninfo.duration = time.Duration(conninfo.Timeout) * time.Millisecond
+	conninfo.Thread = c.S_Atoi(c.CFG["DB"]["THREAD"].(string))
+	conninfo.connQueue.Clear()
+	conninfo.connQueue.CreateQ()
 }
 
-func (db *DBinfo) AllClose() {
-	for i := 0; i < db.Thread; i++ {
-		if len(db.Conn) >= i && db.Conn[i] != nil {
-			db.Conn[i].Close()
-			db.Conn[i] = nil
-		} else if len(db.RedisConn) > i && db.RedisConn[i] != nil {
-			db.RedisConn[i].Close()
-			db.RedisConn[i] = nil
+func (db *DBinfo) init(dbType string) {
+	if dbType == "REDIS" {
+		db.Open = redis_Open
+		db.AllOpen = redis_AllOpen
+		db.ID = c.CFG["REDIS"]["ID"].(string)
+		db.PW = c.CFG["REDIS"]["PW"].(string)
+		db.SID = c.CFG["REDIS"]["SID"].(string)
+		db.ip = c.CFG["REDIS"]["IP"].(string)
+		db.port = c.CFG["REDIS"]["PORT"].(string)
+		db.Ipaddr = db.ip + ":" + db.port
+	} else {
+		db.dbtype = strings.ToLower(dbType)
+		switch db.dbtype {
+		case "mysql":
+			db.Open = mysql_Open
+			db.AllOpen = mysql_AllOpen
+		case "mssql":
+			db.Open = mssql_Open
+			db.AllOpen = mssql_AllOpen
+		case "oracle", "godror":
+			db.Open = oracle_Open
+			db.AllOpen = oracle_AllOpen
 		}
+		db.ID = c.CFG["DB"]["ID"].(string)
+		db.PW = c.CFG["DB"]["PW"].(string)
+		db.SID = c.CFG["DB"]["SID"].(string)
+		db.ip = c.CFG["DB"]["IP"].(string)
+		db.port = c.CFG["DB"]["PORT"].(string)
+		db.Ipaddr = db.ip + ":" + db.port
 	}
+
 }
 
-func (db *DBinfo) GetDBConn(ctx *context.Context) interface{} {
+func (conninfo *ConnInfo) GetDBConn(ctx *context.Context) (interface{}, error) {
+	var temp interface{}
 	for {
-		if temp := db.connQueue.PopQ(); temp != nil {
-			return temp
+		if temp := conninfo.connQueue.PopQ(); temp != nil {
+			break
 		}
 		if (*ctx).Err() != nil {
-			return nil
+			return nil, (*ctx).Err()
 		}
 		time.Sleep(10 * time.Millisecond)
+	}
+
+	switch conn := temp.(type) {
+	case *sql.DB:
+		if err := conn.PingContext(*ctx); err != nil {
+			return nil, err
+		} else {
+			return temp.(*sql.DB), nil
+		}
+	case *redis.Client:
+		if err := conn.Ping(*ctx).Err(); err != nil {
+			return nil, err
+		} else {
+			return temp.(*redis.Client), nil
+		}
+	default:
+		return nil, fmt.Errorf("Invalid Connection DB Type [%v]", conn)
 	}
 }
 
@@ -115,141 +136,4 @@ func CheckRedisConnection(ctx *context.Context, conn *redis.Client) bool {
 		return false
 	}
 	return true
-}
-
-func (db *DBinfo) Do(ctx *context.Context, query string) (table, error) {
-	var conn interface{}
-	if conn = db.GetDBConn(ctx); conn == nil {
-		return table{}, fmt.Errorf("no connection idle")
-	}
-	defer db.connQueue.PushQ(conn)
-	switch query[0] {
-	case 's', 'S':
-		return db.Select(ctx, query, conn.(*sql.DB))
-	case 'i', 'I', 'u', 'U', 'd', 'D':
-		return db.Query(ctx, query, conn.(*sql.DB))
-	case 'e', 'E', 'c', 'C':
-		return db.Procedure(ctx, query, conn.(*sql.DB))
-	default:
-		cmd := strings.Split(query, " ")
-		return table{}, fmt.Errorf("not support query [%s]", cmd[0])
-	}
-}
-
-func (db *DBinfo) Select(ctx *context.Context, query string, conn *sql.DB) (table, error) {
-	var retnTables table
-	var temp interface{}
-	var err error
-	if !CheckConnection(ctx, conn) {
-		temp, err = db.Open(db)
-		if err != nil {
-			return table{}, err
-		} else {
-			conn = temp.(*sql.DB)
-		}
-	}
-
-	// query 실행
-	rows, err := conn.QueryContext(*ctx, query)
-	if err != nil {
-		return table{}, err
-	}
-	defer rows.Close()
-
-	// query 결과
-	culums, err := rows.Columns()
-	if err != nil {
-		return table{}, err
-	}
-
-	retnTables.Cols = make([]column, len(culums))
-	retnTables.Tuples = make([]map[string]string, 0)
-
-	//// 뭐나옴?
-	//test, err := rows.ColumnTypes()
-	//for _, v := range test {
-	//	fmt.Println(" select 3.2 ", v.Name(), v.DatabaseTypeName())
-	//}
-
-	tuple := make([]interface{}, len(culums))
-	for i := range tuple {
-		tuple[i] = new(sql.RawBytes)
-	}
-	// 결과 저장
-	for rows.Next() {
-		err = rows.Scan(tuple...)
-		if err != nil {
-			return table{}, err
-		}
-		tempMap := make(map[string]string)
-
-		for i, v := range tuple {
-			value := *(v.(*sql.RawBytes))
-			if len(value) == 0 {
-				tempMap[culums[i]] = ""
-			} else {
-				tempMap[culums[i]] = string(value)
-			}
-		}
-		retnTables.Tuples = append(retnTables.Tuples, tempMap)
-	}
-	err = rows.Err()
-	if err != nil {
-		return table{}, err
-	}
-	if len(retnTables.Tuples) == 0 {
-		retnTables.Status = false
-		return table{}, fmt.Errorf("no data")
-	}
-
-	retnTables.Status = true
-	return retnTables, nil
-}
-
-func (db *DBinfo) Query(ctx *context.Context, query string, conn *sql.DB) (table, error) {
-	var retnTables table
-	var temp interface{}
-	var err error
-	if !CheckConnection(ctx, conn) {
-		temp, err = db.Open(db)
-		if err != nil {
-			return table{}, err
-		} else {
-			conn = temp.(*sql.DB)
-		}
-	}
-
-	tx, err := conn.Begin()
-	if err != nil {
-		return table{}, err
-	}
-
-	result_exce, err := tx.ExecContext(*ctx, query)
-	defer tx.Rollback()
-	if (*ctx).Err() != nil {
-		return table{}, (*ctx).Err()
-	} else if err != nil {
-		return table{}, err
-	}
-
-	err = tx.Commit()
-	if err != nil {
-		return table{}, err
-	}
-
-	lowerCmd := strings.ToLower(strings.Split(query, " ")[0])
-
-	ret, err := result_exce.RowsAffected()
-	if err != nil {
-		return table{}, err
-	} else if ret <= 0 && lowerCmd != "create" { // create 문은 rows affected 가 없음
-		return table{}, errors.New("no Rows Affected")
-	}
-	retnTables.Retn = int(ret)
-	retnTables.Status = true
-	return retnTables, nil
-}
-
-func (db *DBinfo) Procedure(ctx *context.Context, query string, conn *sql.DB) (table, error) {
-	return table{}, nil
 }

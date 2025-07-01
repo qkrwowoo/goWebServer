@@ -6,6 +6,7 @@ toolchain go1.23.10
 
 require (
 	github.com/suapapa/go_hangul v1.2.1
+	golang.org/x/crypto v0.39.0
 	golang.org/x/text v0.26.0
 	gopkg.in/ini.v1 v1.67.0
 )

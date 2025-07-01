@@ -37,7 +37,11 @@ func init() {
 }
 
 func main() {
-	grpcListenPort := checkArg()
+	var wg sync.WaitGroup
+	wg.Add(1)
+	grpcListenPort := checkArg(&wg)
+	wg.Wait()
+	time.Sleep(500 * time.Millisecond) // DB접속 완료까지 잠깐 대기
 
 	c.Logging.Write(c.LogALL, "=================================================")
 	c.Logging.Write(c.LogALL, "\t [%s] START", os.Args[0])
@@ -49,12 +53,12 @@ func main() {
 		return
 	}
 
-	grpcServer := grpc.NewServer(grpc.UnaryInterceptor(gRPCsrc.UnaryInterceptor))
+	// gRPC Server 기동
+	grpcServer := grpc.NewServer(grpc.UnaryInterceptor(gRPCsrc.UnaryInterceptor)) // interceptor 등록
 	pb.RegisterUserServiceServer(grpcServer, &gRPCsrc.UserServer{})
 	reflection.Register(grpcServer)
-	c.Logging.Write(c.LogALL, "\t Open gRPC Server")
+	c.Logging.Write(c.LogALL, "\t ### Open gRPC Server")
 
-	var wg sync.WaitGroup
 	wg.Add(1)
 	if *s_ini != "" {
 		go check_Config(&wg)
@@ -67,7 +71,7 @@ func main() {
 	wg.Wait()
 }
 
-func checkArg() string {
+func checkArg(wg *sync.WaitGroup) string {
 	if *b_version {
 		var goVersion string
 		info, ok := debug.ReadBuildInfo()
@@ -85,6 +89,7 @@ func checkArg() string {
 		os.Exit(0) // 버전 확인 후 종료
 	}
 
+	var port string
 	if *s_ini != "" {
 		err := c.Load_Config(*s_ini)
 		if err != nil {
@@ -93,16 +98,21 @@ func checkArg() string {
 			os.Exit(0)
 		}
 		init_config()
-		db.MySQL.Init("MYSQL")
-		//db.MsSQL.Init("MSSQL")
-		//db.Oracle.Init("ORACLE")
-		db.Redis.Init("REDIS")
-		return ":" + c.CFG["COMMON"]["PORT"].(string)
-	} else if *s_port != "" {
-		return ":" + *s_port
+		db.RDB.LoadConfig()
+		db.REDIS.LoadConfig()
+		*s_port = ":" + c.CFG["COMMON"]["PORT"].(string)
 	} else {
-		return ":50051"
+		db.RDB.Default("mysql")
+		db.REDIS.Default()
 	}
+
+	if *s_port == "" {
+		*s_port = ":50051"
+	} else if (*s_port)[0] != ':' {
+		port = ":" + *s_port
+	}
+	wg.Done()
+	return port
 }
 
 func init_config() {
@@ -154,9 +164,7 @@ func check_Config(wg *sync.WaitGroup) {
 }
 
 func clearMem() {
-	db.MySQL.AllClose()
-	//db.MsSQL.AllClose()
-	//db.Oracle.AllClose()
-	db.Redis.AllClose()
+	db.RDB.AllClose()
+	db.REDIS.AllClose()
 	end_Signal <- syscall.SIGTERM
 }

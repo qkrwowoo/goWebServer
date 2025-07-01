@@ -9,74 +9,98 @@ import (
 	"math"
 	"strconv"
 	"strings"
+	"sync"
 	"time"
 
-	_ "github.com/denisenkom/go-mssqldb"
 	"github.com/go-redis/redis/v8"
 )
 
-var Redis DBinfo
+type my_redis struct {
+	Mutex    sync.Mutex
+	Conn     []*redis.Client
+	Conninfo ConnInfo
+	DBInfo   DBinfo
+}
 
-func (db *DBinfo) Redis_default() {
-	db.ip = "127.0.0.1"
-	db.port = "6379"
-	db.Ipaddr = db.ip + ":" + db.port
-	db.ID = ""
-	db.PW = ""
-	db.SID = "0"
-	db.dbtype = "redis"
-	db.Timeout = 10000
-	db.duration = time.Duration(db.Timeout) * time.Millisecond
-	db.Thread = 10
-	db.RedisConn = make([]*redis.Client, db.Thread)
-	db.connQueue.CreateQ()
+func (r *my_redis) LoadConfig() {
+	r.AllClose()
+	r.Conninfo.init()
+	r.DBInfo.init("REDIS")
+	r.Conn = make([]*redis.Client, r.Conninfo.Thread)
+	r.DBInfo.AllOpen(r)
+}
 
-	db.AllOpen = func(db *DBinfo) error {
-		for i := 0; i < db.Thread; i++ {
-			go func(*DBinfo, int) {
-				redisNum, err := strconv.Atoi(db.SID)
-				redisConn := redis.NewClient(&redis.Options{
-					Addr:     db.Ipaddr,
-					Username: db.ID,
-					Password: db.PW,
-					DB:       redisNum,
-				})
-				ctx, cancel := context.WithTimeout(context.Background(), db.duration)
-				defer cancel()
-				_, err = redisConn.Ping(ctx).Result()
-				if err != nil {
-					c.Logging.Write(c.LogERROR, "Redis Connect Failed [%s]", err.Error())
-					db.connQueue.PushQ(redis.Client{})
-					return
-				}
-				c.Logging.Write(c.LogTRACE, "Redis Connect Success")
-				db.RedisConn[i] = redisConn
-				db.connQueue.PushQ(db.RedisConn[i])
-			}(db, i)
-		}
-		return nil
+func (r *my_redis) Default() {
+	r.DBInfo.dbtype = "redis"
+	r.DBInfo.ip = "127.0.0.1"
+	r.DBInfo.port = "6379"
+	r.DBInfo.Ipaddr = r.DBInfo.ip + ":" + r.DBInfo.port
+
+	r.DBInfo.ID = ""
+	r.DBInfo.PW = ""
+	r.DBInfo.SID = "0"
+	r.DBInfo.Open = redis_Open
+	r.DBInfo.AllOpen = redis_AllOpen
+
+	r.Conninfo.Timeout = 10000
+	r.Conninfo.duration = time.Duration(r.Conninfo.Timeout) * time.Millisecond
+	r.Conninfo.Thread = 10
+	r.Conninfo.connQueue.CreateQ()
+
+	r.Conn = make([]*redis.Client, r.Conninfo.Thread)
+	r.DBInfo.AllOpen(r)
+}
+
+func redis_Open(db DBinfo, ctx *context.Context) (interface{}, error) {
+	redisNum, err := strconv.Atoi(db.SID)
+	redisConn := redis.NewClient(&redis.Options{
+		Addr:     db.Ipaddr,
+		Username: db.ID,
+		Password: db.PW,
+		DB:       redisNum,
+	})
+	if _, err = redisConn.Ping(*ctx).Result(); err != nil {
+		c.Logging.Write(c.LogERROR, "Redis Connect Failed [%s]", err.Error())
+		return nil, err
 	}
-	db.Open = func(db *DBinfo) (interface{}, error) {
-		redisNum, err := strconv.Atoi(db.SID)
-		redisConn := redis.NewClient(&redis.Options{
-			Addr:     db.Ipaddr,
-			Username: db.ID,
-			Password: db.PW,
-			DB:       redisNum,
-		})
-		ctx, cancel := context.WithTimeout(context.Background(), db.duration)
-		defer cancel()
-		_, err = redisConn.Ping(ctx).Result()
-		if err != nil {
-			c.Logging.Write(c.LogERROR, "Redis Connect Failed [%s]", err.Error())
-			return nil, err
+	c.Logging.Write(c.LogTRACE, "Redis Connect Success")
+	return redisConn, nil
+}
+
+func redis_AllOpen(in interface{}) error {
+	r := in.(*my_redis)
+
+	var wg sync.WaitGroup
+	wg.Add(r.Conninfo.Thread)
+	for i := 0; i < r.Conninfo.Thread; i++ {
+		index := i
+		go func(*sync.WaitGroup, *my_redis, int) {
+			ctx, cancel := context.WithTimeout(context.Background(), r.Conninfo.duration)
+			defer cancel()
+			conn, err := redis_Open(r.DBInfo, &ctx)
+			if err != nil {
+				r.Conninfo.connQueue.PushQ(redis.Client{})
+				return
+			} else {
+				r.Conn[index] = conn.(*redis.Client)
+				r.Conninfo.connQueue.PushQ(r.Conn[index])
+			}
+			wg.Done()
+		}(&wg, r, index)
+	}
+	return nil
+}
+
+func (r *my_redis) AllClose() {
+	for i := 0; i < r.Conninfo.Thread; i++ {
+		if len(r.Conn) > i && r.Conn[i] != nil {
+			r.Conn[i].Close()
+			r.Conn[i] = nil
 		}
-		c.Logging.Write(c.LogTRACE, "Redis Connect Success")
-		return redisConn, nil
 	}
 }
 
-func (db *DBinfo) RedisDo(ctx *context.Context, redis_query string) ([][]byte, error) {
+func (r *my_redis) RedisDo(ctx *context.Context, redis_query string) ([][]byte, error) {
 	var expire time.Duration
 	var err error
 
@@ -106,19 +130,19 @@ func (db *DBinfo) RedisDo(ctx *context.Context, redis_query string) ([][]byte, e
 	var temp interface{}
 	var conn *redis.Client
 
-	if temp = db.GetDBConn(ctx); conn == nil {
-		return nil, fmt.Errorf("no connection idle")
+	if temp, err = r.Conninfo.GetDBConn(ctx); conn == nil || err != nil {
+		return nil, fmt.Errorf("no connection idle [%s]", err.Error())
 	}
 	conn = temp.(*redis.Client)
-	defer db.connQueue.PushQ(conn)
+	defer r.Conninfo.connQueue.PushQ(conn)
 
-	if !CheckRedisConnection(ctx, conn) {
-		if temp, err = db.Open(db); err != nil {
-			return nil, err
-		} else {
-			conn = temp.(*redis.Client)
-		}
-	}
+	// if !CheckRedisConnection(ctx, conn) {
+	// 	if temp, err = r.DBInfo.Open(r.DBInfo, ctx); err != nil {
+	// 		return nil, err
+	// 	} else {
+	// 		conn = temp.(*redis.Client)
+	// 	}
+	// }
 
 	query := strings.Split(redis_query, " ")
 
@@ -286,7 +310,7 @@ func (db *DBinfo) RedisDo(ctx *context.Context, redis_query string) ([][]byte, e
 		if err2 == nil {
 			popTimeout = time.Duration(poptime) * time.Second
 		} else {
-			popTimeout = db.duration
+			popTimeout = r.Conninfo.duration
 		}
 
 		readStrSlice, err = conn.BLPop(*ctx, popTimeout, key).Result()
@@ -297,7 +321,7 @@ func (db *DBinfo) RedisDo(ctx *context.Context, redis_query string) ([][]byte, e
 		if err2 == nil {
 			popTimeout = time.Duration(poptime) * time.Second
 		} else {
-			popTimeout = db.duration
+			popTimeout = r.Conninfo.duration
 		}
 		readStrSlice, err = conn.BRPop(*ctx, popTimeout, key).Result()
 	case "BRPOPLPUSH": // 이미 값이 있으면 RPOP. 없으면 올때까지 대기 (poptime / timeout) + LPUSH 까지

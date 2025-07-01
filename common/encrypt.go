@@ -15,7 +15,7 @@ import (
 	"unicode"
 )
 
-var Key256 string = "63616C6C71756573745E26214252494447452140235E247D3E3C2F2D5D535447"
+var Key256 string = "603deb1015ca71be2b73aef0857d77811f352c073b6108d72d9810a30914dff4"
 
 // null 패딩 함수
 func NullPadding(data []byte, blockSize int) ([]byte, int) {

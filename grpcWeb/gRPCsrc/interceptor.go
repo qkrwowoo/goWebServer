@@ -20,11 +20,6 @@ var noAuthMethods = map[string]bool{
 	"/auth.UserService/Login":    true,
 }
 
-// JWT 검증 함수 (샘플)
-func validateToken(token string) bool {
-	return token == "valid-token" // 실제로는 JWT 파싱해서 확인
-}
-
 // UnaryInterceptor: 인증 + 로깅 + 트레이싱
 func UnaryInterceptor(
 	ctx context.Context,
@@ -72,7 +67,7 @@ func UnaryInterceptor(
 			token := strings.TrimPrefix(authHeader[0], "Bearer ")
 
 			redisCmd := fmt.Sprintf("GET %s", token)
-			_, err = db.Redis.RedisDo(&ctx, redisCmd)
+			_, err = db.REDIS.RedisDo(&ctx, redisCmd)
 			if err != nil {
 				log.Printf("[UNAUTHORIZED] [%s] 인증실패: %s", traceID, info.FullMethod)
 				return nil, status.Error(codes.Unauthenticated, err.Error()+" | "+"invalid token")
