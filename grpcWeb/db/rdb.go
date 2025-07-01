@@ -29,11 +29,11 @@ func (r *rdb) LoadConfig() {
 func (r *rdb) Default(dbType string) {
 	r.DBInfo.dbtype = strings.ToLower(dbType)
 	switch r.DBInfo.dbtype {
-	case "oracle", "godror":
-		r.DBInfo.port = "1521"
-		r.DBInfo.dbtype = "godror"
-		r.DBInfo.Open = oracle_Open
-		r.DBInfo.AllOpen = oracle_AllOpen
+	// case "oracle", "godror":
+	// 	r.DBInfo.port = "1521"
+	// 	r.DBInfo.dbtype = "godror"
+	// 	r.DBInfo.Open = oracle_Open
+	// 	r.DBInfo.AllOpen = oracle_AllOpen
 	case "mssql":
 		r.DBInfo.port = "1433"
 		r.DBInfo.dbtype = "sqlserver"

@@ -52,7 +52,8 @@ func (r *my_redis) Default() {
 }
 
 func redis_Open(db DBinfo, ctx *context.Context) (interface{}, error) {
-	redisNum, err := strconv.Atoi(db.SID)
+	var err error
+	redisNum, _ := strconv.Atoi(db.SID)
 	redisConn := redis.NewClient(&redis.Options{
 		Addr:     db.Ipaddr,
 		Username: db.ID,

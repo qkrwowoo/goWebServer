@@ -1,56 +1,60 @@
 package db
 
-import (
-	"context"
-	"database/sql"
-	"fmt"
-	c "local/common"
-	"strings"
-	"sync"
+//##################################################################
+// 오라클은 so 가 필요함. 지금은 테스트용이니 일단 주석.
+//##################################################################
 
-	_ "github.com/godror/godror"
-)
+// import (
+// 	"context"
+// 	"database/sql"
+// 	"fmt"
+// 	c "local/common"
+// 	"strings"
+// 	"sync"
 
-func oracle_Open(db DBinfo, ctx *context.Context) (interface{}, error) {
-	if strings.ToLower(db.dbtype) == "oracle" {
-		db.dbtype = "godror"
-	}
+// 	_ "github.com/godror/godror"
+// )
 
-	db.connectQuery = fmt.Sprintf("user=\"%s\" password=\"%s\" connectString=\"%s/%s\"", db.ID, db.PW, db.Ipaddr, db.SID)
-	c.Logging.Write(c.LogDEBUG, "connectQuery [%.]", db.connectQuery)
-	conn, err := sql.Open(db.dbtype, db.connectQuery)
-	if err != nil {
-		c.Logging.Write(c.LogERROR, "Oracle Connect Failed [%.][%s]", db.connectQuery, err.Error())
-		return nil, err
-	}
-	c.Logging.Write(c.LogTRACE, "Oracle Connect Success")
+// func oracle_Open(db DBinfo, ctx *context.Context) (interface{}, error) {
+// 	if strings.ToLower(db.dbtype) == "oracle" {
+// 		db.dbtype = "godror"
+// 	}
 
-	if err = conn.PingContext(*ctx); err != nil {
-		return nil, err
-	}
-	return conn, nil
-}
+// 	db.connectQuery = fmt.Sprintf("user=\"%s\" password=\"%s\" connectString=\"%s/%s\"", db.ID, db.PW, db.Ipaddr, db.SID)
+// 	c.Logging.Write(c.LogDEBUG, "connectQuery [%.]", db.connectQuery)
+// 	conn, err := sql.Open(db.dbtype, db.connectQuery)
+// 	if err != nil {
+// 		c.Logging.Write(c.LogERROR, "Oracle Connect Failed [%.][%s]", db.connectQuery, err.Error())
+// 		return nil, err
+// 	}
+// 	c.Logging.Write(c.LogTRACE, "Oracle Connect Success")
 
-func oracle_AllOpen(in interface{}) error {
-	r := in.(*rdb)
+// 	if err = conn.PingContext(*ctx); err != nil {
+// 		return nil, err
+// 	}
+// 	return conn, nil
+// }
 
-	var wg sync.WaitGroup
-	wg.Add(r.Conninfo.Thread)
-	for i := 0; i < r.Conninfo.Thread; i++ {
-		index := i
-		go func(*sync.WaitGroup, *rdb, int) {
-			ctx, cancel := context.WithTimeout(context.Background(), r.Conninfo.duration)
-			defer cancel()
-			conn, err := oracle_Open(r.DBInfo, &ctx)
-			if err != nil {
-				r.Conninfo.connQueue.PushQ(sql.DB{})
-			} else {
-				r.Conn[index] = conn.(*sql.DB)
-				r.Conninfo.connQueue.PushQ(r.Conn[index])
-			}
-			wg.Done()
-		}(&wg, r, index)
-	}
-	wg.Wait()
-	return nil
-}
+// func oracle_AllOpen(in interface{}) error {
+// 	r := in.(*rdb)
+
+// 	var wg sync.WaitGroup
+// 	wg.Add(r.Conninfo.Thread)
+// 	for i := 0; i < r.Conninfo.Thread; i++ {
+// 		index := i
+// 		go func(*sync.WaitGroup, *rdb, int) {
+// 			ctx, cancel := context.WithTimeout(context.Background(), r.Conninfo.duration)
+// 			defer cancel()
+// 			conn, err := oracle_Open(r.DBInfo, &ctx)
+// 			if err != nil {
+// 				r.Conninfo.connQueue.PushQ(sql.DB{})
+// 			} else {
+// 				r.Conn[index] = conn.(*sql.DB)
+// 				r.Conninfo.connQueue.PushQ(r.Conn[index])
+// 			}
+// 			wg.Done()
+// 		}(&wg, r, index)
+// 	}
+// 	wg.Wait()
+// 	return nil
+// }

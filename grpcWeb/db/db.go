@@ -79,9 +79,9 @@ func (db *DBinfo) init(dbType string) {
 		case "mssql":
 			db.Open = mssql_Open
 			db.AllOpen = mssql_AllOpen
-		case "oracle", "godror":
-			db.Open = oracle_Open
-			db.AllOpen = oracle_AllOpen
+			// case "oracle", "godror":
+			// 	db.Open = oracle_Open
+			// 	db.AllOpen = oracle_AllOpen
 		}
 		db.ID = c.CFG["DB"]["ID"].(string)
 		db.PW = c.CFG["DB"]["PW"].(string)
