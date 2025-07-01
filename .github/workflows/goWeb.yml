@@ -21,12 +21,10 @@ jobs:
             mkdir -p goWebServer
             cd goWebServer
             git pull origin main
-            cd goWeb
-            go mod init tidy
-            go build -o goWeb goWeb.go
-            cd ../grpcWeb
-            go mod init tidy
-            go build -o grpcWeb grpcWeb.go
+
+            sh -x build.sh goWeb
+            sh -x build.sh goWeb
+            
             cd ../
             ./goWeb/goWeb -f ./goWeb/goWeb.ini > ./output.log 2>&1 &
             ./grpcWeb/grpcWeb -f ./grpcWeb/grpcWeb.ini > ./output.log 2>&1 &
