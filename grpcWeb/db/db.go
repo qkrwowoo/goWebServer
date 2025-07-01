@@ -56,7 +56,9 @@ func (conninfo *ConnInfo) init() {
 	conninfo.Timeout = c.S_Atoi(c.CFG["DB"]["TIMEOUT"].(string))
 	conninfo.duration = time.Duration(conninfo.Timeout) * time.Millisecond
 	conninfo.Thread = c.S_Atoi(c.CFG["DB"]["THREAD"].(string))
-	conninfo.connQueue.Clear()
+	if conninfo.connQueue.V.Len() > 0 {
+		conninfo.connQueue.Clear()
+	}
 	conninfo.connQueue.CreateQ()
 }
 
