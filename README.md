@@ -1,8 +1,6 @@
 # 사전작업필요.
 
-############################################################
 # golang 설치
-############################################################
 wget https://go.dev/dl/go1.23.10.linux-amd64.tar.gz
 sudo rm -rf /usr/local/go
 sudo tar -C /usr/local -xzf go1.23.10.linux-amd64.tar.gz
@@ -10,9 +8,7 @@ echo "export PATH=$PATH:/usr/local/go/bin" >> ~/.bashrc
 source ~/.bashrc
 go version
 
-############################################################
 # docker 설치
-############################################################
 sudo apt-get remove docker docker-engine docker.io containerd runc    # 기존 삭제
 sudo apt-get update
 sudo apt-get install \
@@ -28,12 +24,9 @@ echo \
 
 sudo apt-get update
 sudo apt-get install docker-ce docker-ce-cli containerd.io docker-compose-plugin
-
 sudo usermod -aG docker ubuntu # 사용자이름 작성
 
-############################################################
 # mysql 설치
-############################################################
 docker run --name my-mysql \
   -e MYSQL_ROOT_PASSWORD=password123 \
   -e MYSQL_DATABASE=mydb \
@@ -41,9 +34,8 @@ docker run --name my-mysql \
   -e MYSQL_PASSWORD=password123 \
   -p 3306:3306 \
   -d mysql
-
-
-# 테스트 테이블 생성
+  
+테스트 테이블 생성
 CREATE DATABASE IF NOT EXISTS test;
 USE test;
 CREATE TABLE IF NOT EXISTS users (
@@ -54,9 +46,7 @@ CREATE TABLE IF NOT EXISTS users (
 );
 
 
-############################################################
 # Redis 설치
-############################################################
 docker run -d --name my_redis -p 6379:6379 redis
 
 
