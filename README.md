@@ -74,7 +74,7 @@ newgrp docker
 ``` bash
 docker run --name my-mysql \
   -e MYSQL_ROOT_PASSWORD=password123 \
-  -e MYSQL_DATABASE=mydb \
+  -e MYSQL_DATABASE=test \
   -e MYSQL_USER=testuser \
   -e MYSQL_PASSWORD=password123 \
   -p 3306:3306 \
