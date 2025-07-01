@@ -43,7 +43,7 @@ func main() {
 
 	grpcHandler.IPADDR = *s_ip + ":" + *s_port
 	c.Logging.Write(c.LogALL, "=================================================")
-	c.Logging.Write(c.LogALL, "\t [%s] START [%s]", os.Args[0], grpcHandler.IPADDR)
+	c.Logging.Write(c.LogALL, "\t [%s] START [%s]", os.Args[0], *s_listen)
 	c.Logging.Write(c.LogALL, "=================================================")
 	r := gin.Default()
 	if releaseMode {
