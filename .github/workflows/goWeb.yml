@@ -9,10 +9,6 @@ jobs:
   Deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository to custom path
-        uses: actions/checkout@v3
-        with:
-         path: goWebServer  # 이 폴더 안에 코드가 들어감
       - name: SSH 
         uses: appleboy/ssh-action@v1.0.3 
         with:
@@ -21,7 +17,14 @@ jobs:
           key: ${{ secrets.EC2_PRIVATE_KEY }}
           script_stop:
           script: |
+            cd /home/ubuntu
+            mkdir -p goWebServer
             cd /home/ubuntu/goWebServer
+            
+            git init
+            git branch -M main
+            git remote add origin https://github.com/qkrwowoo/goWebServer.git
+            git pull origin main
 
             sh -x build.sh goWeb
             sh -x build.sh grpcWeb
@@ -31,15 +34,15 @@ jobs:
             ./grpcWeb/grpcWeb -f ./grpcWeb/grpcWeb.ini > ./output.log 2>&1 &
 
 
-    # steps:
-    #   - name: 여러개 한번에 작성
-    #     run: |
-    #       goWeb/goWeb
-    #       grpcWeb/grpcWeb
-    #       goWebRequest/login.py
+# steps:
+#   - name: 여러개 한번에 작성
+#     run: |
+#       goWeb/goWeb
+#       grpcWeb/grpcWeb
+#       goWebRequest/login.py
 
-    
-            # git init
-            # git branch -M main
-            # git remote add origin https://github.com/qkrwowoo/goWebServer.git
-            # git pull origin main
+
+      # - name: Checkout repository to custom path
+      #   uses: actions/checkout@v3
+      #   with:
+      #    path: goWebServer  # 이 폴더 안에 코드가 들어감
