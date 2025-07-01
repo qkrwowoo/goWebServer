@@ -9,6 +9,10 @@ jobs:
   Deploy:
     runs-on: ubuntu-latest
     steps:
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.23'
       - name: SSH 
         uses: appleboy/ssh-action@v1.0.3 
         with:
@@ -20,14 +24,14 @@ jobs:
             cd /home/ubuntu
             mkdir -p goWebServer
             cd /home/ubuntu/goWebServer
-            
-            git init
-            git branch -M main
-            git remote add origin https://github.com/qkrwowoo/goWebServer.git
-            git pull origin main
 
-            sh -x build.sh goWeb
-            sh -x build.sh grpcWeb
+            git init 2>&1
+            git branch -M main 2>&1
+            git remote add origin https://github.com/qkrwowoo/goWebServer.git 2>&1
+            git pull origin main 2>&1
+
+            sh -x build.sh goWeb 2>&1
+            sh -x build.sh grpcWeb 2>&1
             
             cd ../
             ./goWeb/goWeb -f ./goWeb/goWeb.ini > ./output.log 2>&1 &
