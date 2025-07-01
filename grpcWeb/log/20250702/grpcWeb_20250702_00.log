@@ -1,0 +1,240 @@
+[00:30:25.580] > [DEBUG] >  [ DEFAULT ] =================================================
+[00:30:25.581] > [DEBUG] >  [ COMMON ] =================================================
+[00:30:25.581] > [DEBUG] > 	PORT = [50051]
+[00:30:25.581] > [DEBUG] >  [ LOG ] =================================================
+[00:30:25.581] > [DEBUG] > 	DIR = [./log]
+[00:30:25.581] > [DEBUG] > 	NAME = [grpcWeb]
+[00:30:25.582] > [DEBUG] > 	ENCYN = [n]
+[00:30:25.582] > [DEBUG] > 	LEVEL = [DEBUG,TRACE,ERROR,WARN,STDOUT]
+[00:30:25.582] > [DEBUG] >  [ DB ] =================================================
+[00:30:25.582] > [DEBUG] > 	ID = [root]
+[00:30:25.582] > [DEBUG] > 	PW = [123qwe]
+[00:30:25.582] > [DEBUG] > 	SID = [test]
+[00:30:25.584] > [DEBUG] > 	IP = [127.0.0.1]
+[00:30:25.584] > [DEBUG] > 	PORT = [3306]
+[00:30:25.584] > [DEBUG] > 	TIMEOUT = [1000]
+[00:30:25.584] > [DEBUG] > 	THREAD = [10]
+[00:30:25.584] > [DEBUG] > 	TYPE = [MYSQL]
+[00:30:25.585] > [DEBUG] >  [ REDIS ] =================================================
+[00:30:25.585] > [DEBUG] > 	ID = []
+[00:30:25.585] > [DEBUG] > 	PW = []
+[00:30:25.585] > [DEBUG] > 	SID = [0]
+[00:30:25.585] > [DEBUG] > 	IP = [127.0.0.1]
+[00:30:25.585] > [DEBUG] > 	PORT = [6379]
+[00:30:25.586] > [DEBUG] > 	TIMEOUT = [1000]
+[00:30:25.586] > [DEBUG] > 	THREAD = [10]
+[00:30:25.587] > [DEBUG] > connectQuery [127.0.0.1:3306][root:123qwe@tcp(127.0.0.1:3306)/test]
+[00:30:25.589] > [DEBUG] > connectQuery [127.0.0.1:3306][root:123qwe@tcp(127.0.0.1:3306)/test]
+[00:30:25.590] > [DEBUG] > connectQuery [127.0.0.1:3306][root:123qwe@tcp(127.0.0.1:3306)/test]
+[00:30:25.589] > [DEBUG] > connectQuery [127.0.0.1:3306][root:123qwe@tcp(127.0.0.1:3306)/test]
+[00:30:25.587] > [DEBUG] > connectQuery [127.0.0.1:3306][root:123qwe@tcp(127.0.0.1:3306)/test]
+[00:30:25.589] > [DEBUG] > connectQuery [127.0.0.1:3306][root:123qwe@tcp(127.0.0.1:3306)/test]
+[00:30:25.591] > [TRACE] > MySQL Connect Success
+[00:30:25.592] > [TRACE] > MySQL Connect Success
+[00:30:25.587] > [DEBUG] > connectQuery [127.0.0.1:3306][root:123qwe@tcp(127.0.0.1:3306)/test]
+[00:30:25.593] > [TRACE] > MySQL Connect Success
+[00:30:25.593] > [TRACE] > MySQL Connect Success
+[00:30:25.591] > [TRACE] > MySQL Connect Success
+[00:30:25.587] > [DEBUG] > connectQuery [127.0.0.1:3306][root:123qwe@tcp(127.0.0.1:3306)/test]
+[00:30:25.587] > [DEBUG] > connectQuery [127.0.0.1:3306][root:123qwe@tcp(127.0.0.1:3306)/test]
+[00:30:25.589] > [DEBUG] > connectQuery [127.0.0.1:3306][root:123qwe@tcp(127.0.0.1:3306)/test]
+[00:30:25.593] > [TRACE] > MySQL Connect Success
+[00:30:25.591] > [TRACE] > MySQL Connect Success
+[00:30:25.593] > [TRACE] > MySQL Connect Success
+[00:30:25.594] > [TRACE] > MySQL Connect Success
+[00:30:25.594] > [TRACE] > MySQL Connect Success
+[00:30:25.600] > [TRACE] > Redis Connect Success
+[00:30:25.600] > [TRACE] > Redis Connect Success
+[00:30:25.600] > [TRACE] > Redis Connect Success
+[00:30:25.600] > [TRACE] > Redis Connect Success
+[00:30:25.601] > [TRACE] > Redis Connect Success
+[00:30:25.601] > [TRACE] > Redis Connect Success
+[00:30:25.601] > [TRACE] > Redis Connect Success
+[00:30:25.601] > [TRACE] > Redis Connect Success
+[00:30:25.601] > [TRACE] > Redis Connect Success
+[00:30:25.601] > [TRACE] > Redis Connect Success
+[00:30:26.097] > [ ALL ] > =================================================
+[00:30:26.099] > [ ALL ] > 	 [./grpcWeb] START [:50051]
+[00:30:26.101] > [ ALL ] > =================================================
+[00:30:26.103] > [ ALL ] > 	 ### Open gRPC Server
+[00:31:52.125] > [DEBUG] >  [ LOG ] =================================================
+[00:31:52.125] > [DEBUG] > 	DIR = [./log]
+[00:31:52.126] > [DEBUG] > 	NAME = [grpcWeb]
+[00:31:52.126] > [DEBUG] > 	ENCYN = [n]
+[00:31:52.126] > [DEBUG] > 	LEVEL = [DEBUG,TRACE,ERROR,WARN,STDOUT]
+[00:31:52.126] > [DEBUG] >  [ DB ] =================================================
+[00:31:52.126] > [DEBUG] > 	TYPE = [MYSQL]
+[00:31:52.127] > [DEBUG] > 	ID = [root]
+[00:31:52.127] > [DEBUG] > 	PW = [123qwe]
+[00:31:52.127] > [DEBUG] > 	SID = [test]
+[00:31:52.127] > [DEBUG] > 	IP = [127.0.0.1]
+[00:31:52.127] > [DEBUG] > 	PORT = [3306]
+[00:31:52.127] > [DEBUG] > 	TIMEOUT = [1000]
+[00:31:52.127] > [DEBUG] > 	THREAD = [10]
+[00:31:52.128] > [DEBUG] >  [ REDIS ] =================================================
+[00:31:52.128] > [DEBUG] > 	TIMEOUT = [1000]
+[00:31:52.128] > [DEBUG] > 	THREAD = [10]
+[00:31:52.129] > [DEBUG] > 	ID = []
+[00:31:52.129] > [DEBUG] > 	PW = []
+[00:31:52.129] > [DEBUG] > 	SID = [0]
+[00:31:52.129] > [DEBUG] > 	IP = [127.0.0.1]
+[00:31:52.129] > [DEBUG] > 	PORT = [6379]
+[00:31:52.130] > [DEBUG] >  [ DEFAULT ] =================================================
+[00:31:52.130] > [DEBUG] >  [ COMMON ] =================================================
+[00:31:52.130] > [DEBUG] > 	PORT = [50051]
+[00:31:52.131] > [DEBUG] > connectQuery [127.0.0.1:3306][root:123qwe@tcp(127.0.0.1:3306)/test]
+[00:31:52.132] > [DEBUG] > connectQuery [127.0.0.1:3306][root:123qwe@tcp(127.0.0.1:3306)/test]
+[00:31:52.131] > [DEBUG] > connectQuery [127.0.0.1:3306][root:123qwe@tcp(127.0.0.1:3306)/test]
+[00:31:52.134] > [TRACE] > MySQL Connect Success
+[00:31:52.132] > [DEBUG] > connectQuery [127.0.0.1:3306][root:123qwe@tcp(127.0.0.1:3306)/test]
+[00:31:52.131] > [DEBUG] > connectQuery [127.0.0.1:3306][root:123qwe@tcp(127.0.0.1:3306)/test]
+[00:31:52.133] > [DEBUG] > connectQuery [127.0.0.1:3306][root:123qwe@tcp(127.0.0.1:3306)/test]
+[00:31:52.133] > [DEBUG] > connectQuery [127.0.0.1:3306][root:123qwe@tcp(127.0.0.1:3306)/test]
+[00:31:52.132] > [DEBUG] > connectQuery [127.0.0.1:3306][root:123qwe@tcp(127.0.0.1:3306)/test]
+[00:31:52.135] > [TRACE] > MySQL Connect Success
+[00:31:52.136] > [TRACE] > MySQL Connect Success
+[00:31:52.132] > [DEBUG] > connectQuery [127.0.0.1:3306][root:123qwe@tcp(127.0.0.1:3306)/test]
+[00:31:52.134] > [TRACE] > MySQL Connect Success
+[00:31:52.136] > [TRACE] > MySQL Connect Success
+[00:31:52.135] > [TRACE] > MySQL Connect Success
+[00:31:52.135] > [TRACE] > MySQL Connect Success
+[00:31:52.134] > [TRACE] > MySQL Connect Success
+[00:31:52.134] > [DEBUG] > connectQuery [127.0.0.1:3306][root:123qwe@tcp(127.0.0.1:3306)/test]
+[00:31:52.134] > [TRACE] > MySQL Connect Success
+[00:31:52.137] > [TRACE] > MySQL Connect Success
+[00:31:52.141] > [TRACE] > Redis Connect Success
+[00:31:52.142] > [TRACE] > Redis Connect Success
+[00:31:52.142] > [TRACE] > Redis Connect Success
+[00:31:52.142] > [TRACE] > Redis Connect Success
+[00:31:52.141] > [TRACE] > Redis Connect Success
+[00:31:52.142] > [TRACE] > Redis Connect Success
+[00:31:52.142] > [TRACE] > Redis Connect Success
+[00:31:52.142] > [TRACE] > Redis Connect Success
+[00:31:52.141] > [TRACE] > Redis Connect Success
+[00:31:52.142] > [TRACE] > Redis Connect Success
+[00:31:52.639] > [ ALL ] > =================================================
+[00:31:52.640] > [ ALL ] > 	 [./grpcWeb] START [:50051]
+[00:31:52.641] > [ ALL ] > =================================================
+[00:31:52.643] > [ ALL ] > 	 ### Open gRPC Server
+[00:35:43.159] > [DEBUG] >  [ DB ] =================================================
+[00:35:43.160] > [DEBUG] > 	ID = [root]
+[00:35:43.160] > [DEBUG] > 	PW = [123qwe]
+[00:35:43.160] > [DEBUG] > 	SID = [test]
+[00:35:43.160] > [DEBUG] > 	IP = [127.0.0.1]
+[00:35:43.160] > [DEBUG] > 	PORT = [3306]
+[00:35:43.161] > [DEBUG] > 	TIMEOUT = [1000]
+[00:35:43.161] > [DEBUG] > 	THREAD = [10]
+[00:35:43.161] > [DEBUG] > 	TYPE = [MYSQL]
+[00:35:43.161] > [DEBUG] >  [ REDIS ] =================================================
+[00:35:43.161] > [DEBUG] > 	PW = []
+[00:35:43.161] > [DEBUG] > 	SID = [0]
+[00:35:43.161] > [DEBUG] > 	IP = [127.0.0.1]
+[00:35:43.162] > [DEBUG] > 	PORT = [6379]
+[00:35:43.162] > [DEBUG] > 	TIMEOUT = [1000]
+[00:35:43.162] > [DEBUG] > 	THREAD = [10]
+[00:35:43.162] > [DEBUG] > 	ID = []
+[00:35:43.162] > [DEBUG] >  [ DEFAULT ] =================================================
+[00:35:43.162] > [DEBUG] >  [ COMMON ] =================================================
+[00:35:43.162] > [DEBUG] > 	PORT = [50051]
+[00:35:43.163] > [DEBUG] >  [ LOG ] =================================================
+[00:35:43.163] > [DEBUG] > 	DIR = [./log]
+[00:35:43.163] > [DEBUG] > 	NAME = [grpcWeb]
+[00:35:43.163] > [DEBUG] > 	ENCYN = [n]
+[00:35:43.163] > [DEBUG] > 	LEVEL = [DEBUG,TRACE,ERROR,WARN,STDOUT]
+[00:35:43.164] > [DEBUG] > connectQuery [127.0.0.1:3306][root:123qwe@tcp(127.0.0.1:3306)/test]
+[00:35:43.164] > [DEBUG] > connectQuery [127.0.0.1:3306][root:123qwe@tcp(127.0.0.1:3306)/test]
+[00:35:43.164] > [DEBUG] > connectQuery [127.0.0.1:3306][root:123qwe@tcp(127.0.0.1:3306)/test]
+[00:35:43.164] > [DEBUG] > connectQuery [127.0.0.1:3306][root:123qwe@tcp(127.0.0.1:3306)/test]
+[00:35:43.167] > [DEBUG] > connectQuery [127.0.0.1:3306][root:123qwe@tcp(127.0.0.1:3306)/test]
+[00:35:43.165] > [DEBUG] > connectQuery [127.0.0.1:3306][root:123qwe@tcp(127.0.0.1:3306)/test]
+[00:35:43.169] > [TRACE] > MySQL Connect Success
+[00:35:43.165] > [DEBUG] > connectQuery [127.0.0.1:3306][root:123qwe@tcp(127.0.0.1:3306)/test]
+[00:35:43.167] > [DEBUG] > connectQuery [127.0.0.1:3306][root:123qwe@tcp(127.0.0.1:3306)/test]
+[00:35:43.169] > [TRACE] > MySQL Connect Success
+[00:35:43.170] > [TRACE] > MySQL Connect Success
+[00:35:43.169] > [DEBUG] > connectQuery [127.0.0.1:3306][root:123qwe@tcp(127.0.0.1:3306)/test]
+[00:35:43.164] > [DEBUG] > connectQuery [127.0.0.1:3306][root:123qwe@tcp(127.0.0.1:3306)/test]
+[00:35:43.169] > [TRACE] > MySQL Connect Success
+[00:35:43.171] > [TRACE] > MySQL Connect Success
+[00:35:43.169] > [TRACE] > MySQL Connect Success
+[00:35:43.170] > [TRACE] > MySQL Connect Success
+[00:35:43.169] > [TRACE] > MySQL Connect Success
+[00:35:43.171] > [TRACE] > MySQL Connect Success
+[00:35:43.169] > [TRACE] > MySQL Connect Success
+[00:35:43.175] > [TRACE] > Redis Connect Success
+[00:35:43.175] > [TRACE] > Redis Connect Success
+[00:35:43.175] > [TRACE] > Redis Connect Success
+[00:35:43.175] > [TRACE] > Redis Connect Success
+[00:35:43.175] > [TRACE] > Redis Connect Success
+[00:35:43.175] > [TRACE] > Redis Connect Success
+[00:35:43.175] > [TRACE] > Redis Connect Success
+[00:35:43.175] > [TRACE] > Redis Connect Success
+[00:35:43.175] > [TRACE] > Redis Connect Success
+[00:35:43.175] > [TRACE] > Redis Connect Success
+[00:35:43.673] > [ ALL ] > =================================================
+[00:35:43.674] > [ ALL ] > 	 [./grpcWeb] START [:50051]
+[00:35:43.675] > [ ALL ] > =================================================
+[00:35:43.677] > [ ALL ] > 	 ### Open gRPC Server
+[00:37:15.669] > [DEBUG] >  [ DEFAULT ] =================================================
+[00:37:15.669] > [DEBUG] >  [ COMMON ] =================================================
+[00:37:15.669] > [DEBUG] > 	PORT = [50051]
+[00:37:15.669] > [DEBUG] >  [ LOG ] =================================================
+[00:37:15.670] > [DEBUG] > 	LEVEL = [DEBUG,TRACE,ERROR,WARN,STDOUT]
+[00:37:15.670] > [DEBUG] > 	DIR = [./log]
+[00:37:15.670] > [DEBUG] > 	NAME = [grpcWeb]
+[00:37:15.670] > [DEBUG] > 	ENCYN = [n]
+[00:37:15.670] > [DEBUG] >  [ DB ] =================================================
+[00:37:15.670] > [DEBUG] > 	TYPE = [MYSQL]
+[00:37:15.670] > [DEBUG] > 	ID = [root]
+[00:37:15.671] > [DEBUG] > 	PW = [123qwe]
+[00:37:15.671] > [DEBUG] > 	SID = [test]
+[00:37:15.671] > [DEBUG] > 	IP = [127.0.0.1]
+[00:37:15.671] > [DEBUG] > 	PORT = [3306]
+[00:37:15.671] > [DEBUG] > 	TIMEOUT = [1000]
+[00:37:15.671] > [DEBUG] > 	THREAD = [10]
+[00:37:15.671] > [DEBUG] >  [ REDIS ] =================================================
+[00:37:15.672] > [DEBUG] > 	ID = []
+[00:37:15.672] > [DEBUG] > 	PW = []
+[00:37:15.672] > [DEBUG] > 	SID = [0]
+[00:37:15.672] > [DEBUG] > 	IP = [127.0.0.1]
+[00:37:15.673] > [DEBUG] > 	PORT = [6379]
+[00:37:15.673] > [DEBUG] > 	TIMEOUT = [1000]
+[00:37:15.673] > [DEBUG] > 	THREAD = [10]
+[00:37:15.676] > [DEBUG] > connectQuery [127.0.0.1:3306][root:123qwe@tcp(127.0.0.1:3306)/test]
+[00:37:15.678] > [DEBUG] > connectQuery [127.0.0.1:3306][root:123qwe@tcp(127.0.0.1:3306)/test]
+[00:37:15.678] > [DEBUG] > connectQuery [127.0.0.1:3306][root:123qwe@tcp(127.0.0.1:3306)/test]
+[00:37:15.677] > [DEBUG] > connectQuery [127.0.0.1:3306][root:123qwe@tcp(127.0.0.1:3306)/test]
+[00:37:15.678] > [DEBUG] > connectQuery [127.0.0.1:3306][root:123qwe@tcp(127.0.0.1:3306)/test]
+[00:37:15.678] > [DEBUG] > connectQuery [127.0.0.1:3306][root:123qwe@tcp(127.0.0.1:3306)/test]
+[00:37:15.680] > [TRACE] > MySQL Connect Success
+[00:37:15.677] > [DEBUG] > connectQuery [127.0.0.1:3306][root:123qwe@tcp(127.0.0.1:3306)/test]
+[00:37:15.682] > [DEBUG] > connectQuery [127.0.0.1:3306][root:123qwe@tcp(127.0.0.1:3306)/test]
+[00:37:15.680] > [TRACE] > MySQL Connect Success
+[00:37:15.682] > [TRACE] > MySQL Connect Success
+[00:37:15.680] > [TRACE] > MySQL Connect Success
+[00:37:15.681] > [TRACE] > MySQL Connect Success
+[00:37:15.676] > [DEBUG] > connectQuery [127.0.0.1:3306][root:123qwe@tcp(127.0.0.1:3306)/test]
+[00:37:15.682] > [TRACE] > MySQL Connect Success
+[00:37:15.682] > [TRACE] > MySQL Connect Success
+[00:37:15.682] > [TRACE] > MySQL Connect Success
+[00:37:15.678] > [DEBUG] > connectQuery [127.0.0.1:3306][root:123qwe@tcp(127.0.0.1:3306)/test]
+[00:37:15.684] > [TRACE] > MySQL Connect Success
+[00:37:15.685] > [TRACE] > MySQL Connect Success
+[00:37:15.690] > [TRACE] > Redis Connect Success
+[00:37:15.690] > [TRACE] > Redis Connect Success
+[00:37:15.690] > [TRACE] > Redis Connect Success
+[00:37:15.690] > [TRACE] > Redis Connect Success
+[00:37:15.690] > [TRACE] > Redis Connect Success
+[00:37:15.690] > [TRACE] > Redis Connect Success
+[00:37:15.690] > [TRACE] > Redis Connect Success
+[00:37:15.690] > [TRACE] > Redis Connect Success
+[00:37:15.690] > [TRACE] > Redis Connect Success
+[00:37:15.690] > [TRACE] > Redis Connect Success
+[00:37:16.186] > [ ALL ] > =================================================
+[00:37:16.186] > [ ALL ] > 	 [./grpcWeb] START [:50051]
+[00:37:16.187] > [ ALL ] > =================================================
+[00:37:16.187] > [ ALL ] > 	 ### Open gRPC Server
+[00:37:23.896] > [TRACE] > [Login] Start [testuser2]
+[00:37:23.896] > [41m[ERROR][0m > [Login] db.Do Error  [no connection idle [Invalid Connection DB Type [<nil>]]]
+[00:37:30.287] > [TRACE] > [Login] Start [testuser1]
+[00:37:30.287] > [41m[ERROR][0m > [Login] db.Do Error  [no connection idle [Invalid Connection DB Type [<nil>]]]

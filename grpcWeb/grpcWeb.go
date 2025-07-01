@@ -39,14 +39,14 @@ func init() {
 func main() {
 	var wg sync.WaitGroup
 	wg.Add(1)
-	grpcListenPort := checkArg(&wg)
+	checkArg(&wg)
 	wg.Wait()
 	time.Sleep(500 * time.Millisecond) // DB접속 완료까지 잠깐 대기
 
 	c.Logging.Write(c.LogALL, "=================================================")
 	c.Logging.Write(c.LogALL, "\t [%s] START [%s]", os.Args[0], *s_port)
 	c.Logging.Write(c.LogALL, "=================================================")
-	lis, err := net.Listen("tcp", grpcListenPort)
+	lis, err := net.Listen("tcp", *s_port)
 	if err != nil {
 		clearMem()
 		log.Fatal("Failed to connect to gRPC server:", err)
