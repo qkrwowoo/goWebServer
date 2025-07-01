@@ -1,0 +1,60 @@
+syntax = "proto3";
+
+package auth;
+
+option go_package = "grpcWeb/proto;auth";
+
+// gRPC 서비스 정의
+service UserService {
+  rpc Login(LoginRequest) returns (LoginResponse);
+  rpc Register(RegisterRequest) returns (RegisterResponse);
+  rpc GetUserInfo(UserInfoRequest) returns (UserInfoResponse);
+  rpc UpdateUserInfo(UpdateUserInfoRequest) returns (UpdateUserInfoResponse);
+}
+
+// 요청/응답 메시지 정의
+
+message RegisterRequest {
+  string UserId = 1;
+  string UserPw = 2;
+  string DbType = 3;
+}
+
+message RegisterResponse {
+  bool Success = 1;
+  string Message = 2;
+}
+
+message LoginRequest {
+  string UserId = 1;
+  string UserPw = 2;
+  string DbType = 3;
+}
+
+message LoginResponse {
+  string Token = 1;
+  string Message = 2;
+}
+
+message UserInfoRequest {
+  string UserId = 1;
+  string Token = 2;
+  string DbType = 3;
+}
+
+message UserInfoResponse {
+  bool Status = 1;
+  string LastLogin = 2;
+}
+
+message UpdateUserInfoRequest {
+  string UserId = 1;
+  string UserPw = 2;
+  string DbType = 3;
+  string NewUserPw = 4;
+}
+
+message UpdateUserInfoResponse {
+  bool Success = 1;
+  string Message = 2;
+}
