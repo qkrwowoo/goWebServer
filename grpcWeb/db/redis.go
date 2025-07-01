@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	c "local/common"
 	"math"
 	"strconv"
 	"strings"
@@ -44,9 +45,11 @@ func (db *DBinfo) Redis_default() {
 				defer cancel()
 				_, err = redisConn.Ping(ctx).Result()
 				if err != nil {
+					c.Logging.Write(c.LogERROR, "Redis Connect Failed [%s]", err.Error())
 					db.connQueue.PushQ(redis.Client{})
 					return
 				}
+				c.Logging.Write(c.LogTRACE, "Redis Connect Success")
 				db.RedisConn[i] = redisConn
 				db.connQueue.PushQ(db.RedisConn[i])
 			}(db, i)
@@ -65,8 +68,10 @@ func (db *DBinfo) Redis_default() {
 		defer cancel()
 		_, err = redisConn.Ping(ctx).Result()
 		if err != nil {
+			c.Logging.Write(c.LogERROR, "Redis Connect Failed [%s]", err.Error())
 			return nil, err
 		}
+		c.Logging.Write(c.LogTRACE, "Redis Connect Success")
 		return redisConn, nil
 	}
 }
