@@ -9,6 +9,10 @@ jobs:
   Deploy:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout repository to custom path
+        uses: actions/checkout@v3
+        with:
+         path: goWebServer  # 이 폴더 안에 코드가 들어감
       - name: SSH 
         uses: appleboy/ssh-action@v1.0.3 
         with:
@@ -17,13 +21,10 @@ jobs:
           key: ${{ secrets.EC2_PRIVATE_KEY }}
           script_stop:
           script: |
-            cd /home/ubuntu/
-            mkdir -p goWebServer
-            cd goWebServer
-            git pull origin main
+            cd /home/ubuntu/goWebServer
 
             sh -x build.sh goWeb
-            sh -x build.sh goWeb
+            sh -x build.sh grpcWeb
             
             cd ../
             ./goWeb/goWeb -f ./goWeb/goWeb.ini > ./output.log 2>&1 &
@@ -36,3 +37,9 @@ jobs:
     #       goWeb/goWeb
     #       grpcWeb/grpcWeb
     #       goWebRequest/login.py
+
+    
+            # git init
+            # git branch -M main
+            # git remote add origin https://github.com/qkrwowoo/goWebServer.git
+            # git pull origin main
