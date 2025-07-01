@@ -18,8 +18,9 @@ jobs:
           script_stop:
           script: |
             cd /home/ubuntu/
-            git pull origin main
+            mkdir -p goWebServer
             cd goWebServer
+            git pull origin main
 
             sh -x build.sh goWeb
             sh -x build.sh goWeb
