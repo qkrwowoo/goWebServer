@@ -116,8 +116,10 @@ func setDB(dbtype string) *db.DBinfo {
 		return &db.MySQL
 	case "mssql", "sqlserver":
 		return &db.MsSQL
-	case "oracle":
-		return &db.Oracle
+	/*
+		case "oracle":
+			return &db.Oracle
+	*/
 	default:
 		return nil
 	}

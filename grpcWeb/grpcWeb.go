@@ -96,7 +96,7 @@ func checkArg() string {
 		init_config()
 		db.MySQL.Init("MYSQL")
 		db.MsSQL.Init("MSSQL")
-		db.Oracle.Init("ORACLE")
+		//db.Oracle.Init("ORACLE")
 		return ":" + c.CFG["COMMON"]["PORT"].(string)
 	} else if *s_port != "" {
 		return ":" + *s_port
@@ -156,7 +156,7 @@ func check_Config(wg *sync.WaitGroup) {
 func clearMem() {
 	db.MySQL.AllClose()
 	db.MsSQL.AllClose()
-	db.Oracle.AllClose()
+	//db.Oracle.AllClose()
 	db.Redis.AllClose()
 	end_Signal <- syscall.SIGTERM
 }
