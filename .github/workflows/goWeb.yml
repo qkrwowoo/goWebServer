@@ -26,6 +26,9 @@ jobs:
             git remote add origin https://github.com/qkrwowoo/goWebServer.git 2>&1
             git pull origin main 2>&1
 
+            sudo fuser -k -n tcp 8080
+            sudo fuser -k -n tcp 50051
+            
             sh -x build.sh goWeb 2>&1
             sh -x build.sh grpcWeb 2>&1
             
