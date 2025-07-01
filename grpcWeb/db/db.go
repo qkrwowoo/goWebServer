@@ -49,7 +49,7 @@ type column struct {
 
 func init() {
 	MySQL.MySQL_default()
-	MsSQL.MsSQL_default()
+	//MsSQL.MsSQL_default()
 	//Oracle.Oracle_default()
 	Redis.Redis_default()
 }
