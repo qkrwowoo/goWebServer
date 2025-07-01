@@ -17,14 +17,12 @@ jobs:
           key: ${{ secrets.EC2_PRIVATE_KEY }}
           script_stop:
           script: |
-            cd /home/ubuntu/
-            mkdir -p goWebServer
-            cd goWebServer
             git pull origin main
+            cd goWebServer
 
             sh -x build.sh goWeb
             sh -x build.sh goWeb
-            
+
             cd ../
             ./goWeb/goWeb -f ./goWeb/goWeb.ini > ./output.log 2>&1 &
             ./grpcWeb/grpcWeb -f ./grpcWeb/grpcWeb.ini > ./output.log 2>&1 &
