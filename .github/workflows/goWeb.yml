@@ -1,0 +1,40 @@
+name: goWeb
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  Deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: SSH 
+        uses: appleboy/ssh-action@v1.0.3 
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_PRIVATE_KEY }}
+          script_stop:
+          script: |
+            cd /home/ubuntu/
+            mkdir -p goWebServer
+            cd goWebServer
+            git pull origin main
+            cd goWeb
+            go mod init tidy
+            go build -o goWeb goWeb.go
+            cd ../grpcWeb
+            go mod init tidy
+            go build -o grpcWeb grpcWeb.go
+            cd ../
+            ./goWeb/goWeb -f ./goWeb/goWeb.ini > ./output.log 2>&1 &
+            ./grpcWeb/grpcWeb -f ./grpcWeb/grpcWeb.ini > ./output.log 2>&1 &
+
+
+    # steps:
+    #   - name: 여러개 한번에 작성
+    #     run: |
+    #       goWeb/goWeb
+    #       grpcWeb/grpcWeb
+    #       goWebRequest/login.py
