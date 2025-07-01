@@ -50,8 +50,6 @@ var RDB rdb
 var REDIS my_redis
 
 func init() {
-	RDB.Default("mysql")
-	REDIS.Default()
 }
 
 func (conninfo *ConnInfo) init() {
