@@ -1,7 +1,7 @@
 import requests
 import json
 
-url = "http://localhost:8080/login"
+url = "http://15.165.161.150:8080/login"
 headers = {
     "Content-Type": "application/json"
 }

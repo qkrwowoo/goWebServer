@@ -61,7 +61,6 @@ func main() {
 	} else {
 		wg.Done()
 	}
-	fmt.Println("  3  ??????????")
 	if err := grpcServer.Serve(lis); err != nil {
 		clearMem()
 	}

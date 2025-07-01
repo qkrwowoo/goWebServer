@@ -95,12 +95,12 @@ func (db *DBinfo) AllClose() {
 func (db *DBinfo) GetDBConn(ctx *context.Context) interface{} {
 	for {
 		if temp := db.connQueue.PopQ(); temp != nil {
-			return temp.(*sql.DB)
+			return temp
 		}
-		select {
-		case <-(*ctx).Done():
+		if (*ctx).Err() != nil {
 			return nil
 		}
+		time.Sleep(10 * time.Millisecond)
 	}
 }
 
