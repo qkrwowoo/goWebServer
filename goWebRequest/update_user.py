@@ -1,13 +1,16 @@
 import requests
 
-url = "http://13.125.250.202:8080/user/update"
+with open("token.txt", "r") as f:
+    token = f.read().strip()
+
+url = "http://127.0.0.1:8080/user/update"
 headers = {
     "Content-Type": "application/json",
-    "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NTE0NTU4NTUsInVzZXJuYW1lIjoidGVzdHVzZXIifQ.wI6efYl9txKqCnN3W4UhebhC9zgrHGA8jxCj3ztn1W8"
+    "Authorization": f"Bearer {token}"
 }
 data = {
-    "UserID": "testuser",
-    "UserPW": "password123",
+    "UserID": "testuser2",
+    "UserPW": "newpassword123",
     "NewUserPw": "newpassword123",
     "DbType": "mysql"
 }

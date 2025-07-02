@@ -12,8 +12,7 @@ jobs:
       - name: SSH 
         uses: appleboy/ssh-action@v1.0.3 
         with:
-          # host: ${{ secrets.EC2_HOST }}
-          host: 13.125.250.202
+          host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.EC2_PRIVATE_KEY }}
           script_stop:
