@@ -22,8 +22,8 @@ func mysql_Open(db DBinfo, ctx *context.Context) (interface{}, error) {
 		c.Logging.Write(c.LogERROR, "MySQL Connect Failed [%.][%s]", db.Info.connectQuery, err.Error())
 		return nil, err
 	}
-	c.Logging.Write(c.LogTRACE, "MySQL Connect Success")
 
+	c.Logging.Write(c.LogTRACE, "MySQL Connect Success")
 	return conn, nil
 }
 
