@@ -9,7 +9,7 @@ headers = {
     "Authorization": f"Bearer {token}"
 }
 data = {
-    "UserID": "testuser2",
+    "UserID": "testuser",
     "DbType": "mysql"
 }
 

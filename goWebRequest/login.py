@@ -5,7 +5,7 @@ headers = {
     "Content-Type": "application/json"
 }
 data = {
-    "UserID": "testuser2",
+    "UserID": "testuser",
     "UserPW": "newpassword123",
     "DbType": "mysql"
 }
