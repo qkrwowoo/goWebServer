@@ -1,0 +1,8 @@
+# 실행 파일
+goWeb/goWeb
+grpcWeb/grpcWeb
+
+# 로그 파일
+output.log
+log/
+*.log
