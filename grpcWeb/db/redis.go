@@ -16,48 +16,53 @@ import (
 )
 
 type my_redis struct {
-	Mutex    sync.Mutex
-	Conn     []*redis.Client
-	Conninfo ConnInfo
-	DBInfo   DBinfo
+	Mutex     sync.Mutex
+	connQueue c.Queue
+	Conn      []*redis.Client
+	DB        DBinfo
 }
 
 func (r *my_redis) LoadConfig() {
 	r.AllClose()
-	r.Conninfo.init()
-	r.DBInfo.init("REDIS")
-	r.Conn = make([]*redis.Client, r.Conninfo.Thread)
-	r.DBInfo.AllOpen(r)
+	r.DB.init("redis")
+	r.Conn = make([]*redis.Client, r.DB.Info.Thread)
+	if r.connQueue.V != nil && r.connQueue.V.Len() > 0 {
+		r.connQueue.Clear()
+	}
+	r.connQueue.CreateQ()
+	r.DB.AllOpen(r)
 }
 
 func (r *my_redis) Default() {
-	r.DBInfo.dbtype = "redis"
-	r.DBInfo.ip = "127.0.0.1"
-	r.DBInfo.port = "6379"
-	r.DBInfo.Ipaddr = r.DBInfo.ip + ":" + r.DBInfo.port
+	r.DB.Info.dbtype = "redis"
 
-	r.DBInfo.ID = ""
-	r.DBInfo.PW = ""
-	r.DBInfo.SID = "0"
-	r.DBInfo.Open = redis_Open
-	r.DBInfo.AllOpen = redis_AllOpen
+	r.DB.Open = redis_Open
+	r.DB.AllOpen = redis_AllOpen
 
-	r.Conninfo.Timeout = 10000
-	r.Conninfo.duration = time.Duration(r.Conninfo.Timeout) * time.Millisecond
-	r.Conninfo.Thread = 10
-	r.Conninfo.connQueue.CreateQ()
+	r.DB.Info.ip = "127.0.0.1"
+	r.DB.Info.port = "6379"
+	r.DB.Info.Ipaddr = r.DB.Info.ip + ":" + r.DB.Info.port
 
-	r.Conn = make([]*redis.Client, r.Conninfo.Thread)
-	r.DBInfo.AllOpen(r)
+	r.DB.Info.ID = ""
+	r.DB.Info.PW = ""
+	r.DB.Info.SID = "0"
+
+	r.DB.Info.Timeout = 10000
+	r.DB.Info.duration = time.Duration(r.DB.Info.Timeout) * time.Millisecond
+	r.DB.Info.Thread = 10
+
+	r.connQueue.CreateQ()
+	r.Conn = make([]*redis.Client, r.DB.Info.Thread)
+	r.DB.AllOpen(r)
 }
 
 func redis_Open(db DBinfo, ctx *context.Context) (interface{}, error) {
 	var err error
-	redisNum, _ := strconv.Atoi(db.SID)
+	redisNum, _ := strconv.Atoi(db.Info.SID)
 	redisConn := redis.NewClient(&redis.Options{
-		Addr:     db.Ipaddr,
-		Username: db.ID,
-		Password: db.PW,
+		Addr:     db.Info.Ipaddr,
+		Username: db.Info.ID,
+		Password: db.Info.PW,
 		DB:       redisNum,
 	})
 	if _, err = redisConn.Ping(*ctx).Result(); err != nil {
@@ -72,19 +77,19 @@ func redis_AllOpen(in interface{}) error {
 	r := in.(*my_redis)
 
 	var wg sync.WaitGroup
-	wg.Add(r.Conninfo.Thread)
-	for i := 0; i < r.Conninfo.Thread; i++ {
+	wg.Add(r.DB.Info.Thread)
+	for i := 0; i < r.DB.Info.Thread; i++ {
 		index := i
 		go func(*sync.WaitGroup, *my_redis, int) {
-			ctx, cancel := context.WithTimeout(context.Background(), r.Conninfo.duration)
+			ctx, cancel := context.WithTimeout(context.Background(), r.DB.Info.duration)
 			defer cancel()
-			conn, err := redis_Open(r.DBInfo, &ctx)
+			conn, err := redis_Open(r.DB, &ctx)
 			if err != nil {
-				r.Conninfo.connQueue.PushQ(redis.Client{})
+				r.connQueue.PushQ(redis.Client{})
 				return
 			} else {
 				r.Conn[index] = conn.(*redis.Client)
-				r.Conninfo.connQueue.PushQ(r.Conn[index])
+				r.connQueue.PushQ(r.Conn[index])
 			}
 			wg.Done()
 		}(&wg, r, index)
@@ -93,11 +98,37 @@ func redis_AllOpen(in interface{}) error {
 }
 
 func (r *my_redis) AllClose() {
-	for i := 0; i < r.Conninfo.Thread; i++ {
+	for i := 0; i < r.DB.Info.Thread; i++ {
 		if len(r.Conn) > i && r.Conn[i] != nil {
 			r.Conn[i].Close()
 			r.Conn[i] = nil
 		}
+	}
+}
+
+func (r *my_redis) GetDBConn(ctx *context.Context) (interface{}, error) {
+	var temp interface{}
+	for {
+		if temp = r.connQueue.PopQ(); temp != nil {
+			break
+		}
+		if (*ctx).Err() != nil {
+			return nil, (*ctx).Err()
+		}
+		time.Sleep(10 * time.Millisecond)
+	}
+	conn := temp.(*redis.Client)
+	if err := conn.Ping(*ctx).Err(); err != nil {
+		c.Logging.Write(c.LogWARN, "DB Connection Broken[%s]... Try ReConnect ", err.Error())
+		temp, err = r.DB.Open(r.DB, ctx)
+		if err != nil {
+			r.connQueue.PushQ(redis.Client{})
+			return nil, err
+		} else {
+			return temp, nil
+		}
+	} else {
+		return temp, nil
 	}
 }
 
@@ -131,19 +162,11 @@ func (r *my_redis) RedisDo(ctx *context.Context, redis_query string) ([][]byte, 
 	var temp interface{}
 	var conn *redis.Client
 
-	if temp, err = r.Conninfo.GetDBConn(ctx); conn == nil || err != nil {
+	if temp, err = r.GetDBConn(ctx); temp == nil || err != nil {
 		return nil, fmt.Errorf("no connection idle [%s]", err.Error())
 	}
 	conn = temp.(*redis.Client)
-	defer r.Conninfo.connQueue.PushQ(conn)
-
-	// if !CheckRedisConnection(ctx, conn) {
-	// 	if temp, err = r.DBInfo.Open(r.DBInfo, ctx); err != nil {
-	// 		return nil, err
-	// 	} else {
-	// 		conn = temp.(*redis.Client)
-	// 	}
-	// }
+	defer r.connQueue.PushQ(conn)
 
 	query := strings.Split(redis_query, " ")
 
@@ -153,12 +176,6 @@ func (r *my_redis) RedisDo(ctx *context.Context, redis_query string) ([][]byte, 
 
 	hashKey = query[1]
 	hashValue = append(hashValue, query[2:]...)
-
-	/*
-		Common.Logging.Write(Common.LogDEBUG, "COMMAND [%s]", command)
-		Common.Logging.Write(Common.LogDEBUG, "KEY     [%s]", key)
-		Common.Logging.Write(Common.LogDEBUG, "VALUE   [%s]", value)
-	*/
 
 	keys = make([]string, 0)
 	vals = make([]string, 0)
@@ -311,7 +328,7 @@ func (r *my_redis) RedisDo(ctx *context.Context, redis_query string) ([][]byte, 
 		if err2 == nil {
 			popTimeout = time.Duration(poptime) * time.Second
 		} else {
-			popTimeout = r.Conninfo.duration
+			popTimeout = r.DB.Info.duration
 		}
 
 		readStrSlice, err = conn.BLPop(*ctx, popTimeout, key).Result()
@@ -322,7 +339,7 @@ func (r *my_redis) RedisDo(ctx *context.Context, redis_query string) ([][]byte, 
 		if err2 == nil {
 			popTimeout = time.Duration(poptime) * time.Second
 		} else {
-			popTimeout = r.Conninfo.duration
+			popTimeout = r.DB.Info.duration
 		}
 		readStrSlice, err = conn.BRPop(*ctx, popTimeout, key).Result()
 	case "BRPOPLPUSH": // 이미 값이 있으면 RPOP. 없으면 올때까지 대기 (poptime / timeout) + LPUSH 까지
@@ -509,7 +526,6 @@ func (r *my_redis) RedisDo(ctx *context.Context, redis_query string) ([][]byte, 
 		readStr, err = conn.Type(*ctx, key).Result()
 	///////////////////////////////////////////////////////////////////////////////////////
 	default:
-		//Common.Logging.Write(Common.LogERROR, "NOT SUPPORTED REDIS COMMAND [%v]", command)
 		return nil, errors.New("NOT SUPPORTED REDIS COMMAND")
 	}
 
@@ -523,7 +539,6 @@ func (r *my_redis) RedisDo(ctx *context.Context, redis_query string) ([][]byte, 
 		if readInterface[0] == nil {
 			return nil, errors.New("data is nil")
 		}
-		//Common.Logging.Write(Common.LogDEBUG, "REDIS READ DATA itf  [%v]", readInterface)
 
 		i := 0
 		for _, val := range readInterface { // keys 는 위에서 설정하고 옴
@@ -535,7 +550,6 @@ func (r *my_redis) RedisDo(ctx *context.Context, redis_query string) ([][]byte, 
 		}
 		//keys = value
 	} else if len(readMap) != 0 { // REDIS []string 리턴
-		//Common.Logging.Write(Common.LogDEBUG, "REDIS READ DATA map  (%d)[%v]", len(readMap), readMap)
 		for key, val := range readMap {
 			keys = append(keys, key)
 			vals = append(vals, val)
@@ -544,13 +558,11 @@ func (r *my_redis) RedisDo(ctx *context.Context, redis_query string) ([][]byte, 
 		if len(readStrSlice) <= 0 {
 			return nil, errors.New("data is nil")
 		}
-		//Common.Logging.Write(Common.LogDEBUG, "REDIS READ DATA slic (%d)[%v]", len(readStrSlice), readStrSlice)
 		for i, val := range readStrSlice {
 			keys = append(keys, "RESULT"+strconv.Itoa(i+1))
 			vals = append(vals, val)
 		}
 	} else if boolFlag { // REDIS bool 리턴
-		//Common.Logging.Write(Common.LogDEBUG, "REDIS READ DATA bool [%v]", readBool)
 		keys = append(keys, "RESULT")
 		if readBool {
 			vals = append(vals, "OK")
@@ -558,19 +570,16 @@ func (r *my_redis) RedisDo(ctx *context.Context, redis_query string) ([][]byte, 
 			vals = append(vals, "NO")
 		}
 	} else if intFlag { // REDIS int 리턴
-		//Common.Logging.Write(Common.LogDEBUG, "REDIS READ DATA int [%v]", readInt)
 		keys = append(keys, "RESULT")
 		sInt := fmt.Sprintf("%d", readInt)
 		vals = make([]string, 0) // int 리턴은 어차피 응답값만 하니까 한번 초기화하자
 		vals = append(vals, sInt)
 		//keys = append(keys, "RESULT")
 	} else if len(readStr) == 0 { // REDIS err 아니지만, 리턴값이 없을 때
-		//Common.Logging.Write(Common.LogDEBUG, "REDIS READ DATA str (%d)[%v]", len(readStr), readStr)
 		keys = append(keys, "RESULT")
 		vals = append(vals, "OK")
 		//keys = append(keys, "RESULT")
 	} else {
-		//Common.Logging.Write(Common.LogDEBUG, "REDIS READ DATA else (%d)[%v]", len(readStr), readStr)
 		vals = append(vals, readStr)
 		//keys = append(keys, "RESULT")
 	}

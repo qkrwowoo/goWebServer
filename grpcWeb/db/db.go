@@ -2,27 +2,23 @@ package db
 
 import (
 	"context"
-	"database/sql"
-	"fmt"
 	"strings"
 	"time"
 
 	c "local/common"
-
-	"github.com/go-redis/redis/v8"
 )
 
-type ConnInfo struct {
-	connQueue c.Queue
-	Thread    int
-	Timeout   int
-	duration  time.Duration
-	Ctx       context.Context
+type DBinfo struct {
+	Open    func(DBinfo, *context.Context) (interface{}, error)
+	AllOpen func(interface{}) error
+	Info    Conninfo
 }
 
-type DBinfo struct {
-	Open         func(DBinfo, *context.Context) (interface{}, error)
-	AllOpen      func(interface{}) error
+type Conninfo struct {
+	Thread       int
+	Timeout      int
+	duration     time.Duration
+	Ctx          context.Context
 	dbtype       string
 	connectQuery string
 	ID           string
@@ -50,90 +46,48 @@ var RDB rdb
 var REDIS my_redis
 
 func init() {
-}
-
-func (conninfo *ConnInfo) init() {
-	conninfo.Timeout = c.S_Atoi(c.CFG["DB"]["TIMEOUT"].(string))
-	conninfo.duration = time.Duration(conninfo.Timeout) * time.Millisecond
-	conninfo.Thread = c.S_Atoi(c.CFG["DB"]["THREAD"].(string))
-	if conninfo.connQueue.V != nil && conninfo.connQueue.V.Len() > 0 {
-		conninfo.connQueue.Clear()
-	}
-	conninfo.connQueue.CreateQ()
+	RDB.Default("mysql")
+	REDIS.Default()
 }
 
 func (db *DBinfo) init(dbType string) {
-	if dbType == "REDIS" {
+	db.Info.dbtype = strings.ToLower(dbType)
+	switch db.Info.dbtype {
+	case "redis":
 		db.Open = redis_Open
 		db.AllOpen = redis_AllOpen
-		db.ID = c.CFG["REDIS"]["ID"].(string)
-		db.PW = c.CFG["REDIS"]["PW"].(string)
-		db.SID = c.CFG["REDIS"]["SID"].(string)
-		db.ip = c.CFG["REDIS"]["IP"].(string)
-		db.port = c.CFG["REDIS"]["PORT"].(string)
-		db.Ipaddr = db.ip + ":" + db.port
+	case "mysql":
+		db.Open = mysql_Open
+		db.AllOpen = mysql_AllOpen
+	case "mssql":
+		db.Open = mssql_Open
+		db.AllOpen = mssql_AllOpen
+		// case "oracle", "godror":
+		// 	db.Open = oracle_Open
+		// 	db.AllOpen = oracle_AllOpen
+	}
+	db.Info.init()
+}
+
+func (cinfo *Conninfo) init() {
+	if cinfo.dbtype == "redis" {
+		cinfo.ID = c.CFG["REDIS"]["ID"].(string)
+		cinfo.PW = c.CFG["REDIS"]["PW"].(string)
+		cinfo.SID = c.CFG["REDIS"]["SID"].(string)
+		cinfo.ip = c.CFG["REDIS"]["IP"].(string)
+		cinfo.port = c.CFG["REDIS"]["PORT"].(string)
+		cinfo.Ipaddr = cinfo.ip + ":" + cinfo.port
+		cinfo.Timeout = c.S_Atoi(c.CFG["REDIS"]["TIMEOUT"].(string))
+		cinfo.Thread = c.S_Atoi(c.CFG["REDIS"]["THREAD"].(string))
 	} else {
-		db.dbtype = strings.ToLower(dbType)
-		switch db.dbtype {
-		case "mysql":
-			db.Open = mysql_Open
-			db.AllOpen = mysql_AllOpen
-		case "mssql":
-			db.Open = mssql_Open
-			db.AllOpen = mssql_AllOpen
-			// case "oracle", "godror":
-			// 	db.Open = oracle_Open
-			// 	db.AllOpen = oracle_AllOpen
-		}
-		db.ID = c.CFG["DB"]["ID"].(string)
-		db.PW = c.CFG["DB"]["PW"].(string)
-		db.SID = c.CFG["DB"]["SID"].(string)
-		db.ip = c.CFG["DB"]["IP"].(string)
-		db.port = c.CFG["DB"]["PORT"].(string)
-		db.Ipaddr = db.ip + ":" + db.port
+		cinfo.ID = c.CFG["DB"]["ID"].(string)
+		cinfo.PW = c.CFG["DB"]["PW"].(string)
+		cinfo.SID = c.CFG["DB"]["SID"].(string)
+		cinfo.ip = c.CFG["DB"]["IP"].(string)
+		cinfo.port = c.CFG["DB"]["PORT"].(string)
+		cinfo.Ipaddr = cinfo.ip + ":" + cinfo.port
+		cinfo.Timeout = c.S_Atoi(c.CFG["DB"]["TIMEOUT"].(string))
+		cinfo.Thread = c.S_Atoi(c.CFG["DB"]["THREAD"].(string))
 	}
-
-}
-
-func (conninfo *ConnInfo) GetDBConn(ctx *context.Context) (interface{}, error) {
-	var temp interface{}
-	for {
-		if temp := conninfo.connQueue.PopQ(); temp != nil {
-			break
-		}
-		if (*ctx).Err() != nil {
-			return nil, (*ctx).Err()
-		}
-		time.Sleep(10 * time.Millisecond)
-	}
-
-	switch conn := temp.(type) {
-	case *sql.DB:
-		if err := conn.PingContext(*ctx); err != nil {
-			return nil, err
-		} else {
-			return temp.(*sql.DB), nil
-		}
-	case *redis.Client:
-		if err := conn.Ping(*ctx).Err(); err != nil {
-			return nil, err
-		} else {
-			return temp.(*redis.Client), nil
-		}
-	default:
-		return nil, fmt.Errorf("Invalid Connection DB Type [%v]", conn)
-	}
-}
-
-func CheckConnection(ctx *context.Context, conn *sql.DB) bool {
-	if err := conn.PingContext(*ctx); err != nil {
-		return false
-	}
-	return true
-}
-func CheckRedisConnection(ctx *context.Context, conn *redis.Client) bool {
-	if err := conn.Ping(*ctx).Err(); err != nil {
-		return false
-	}
-	return true
+	cinfo.duration = time.Duration(cinfo.Timeout) * time.Millisecond
 }

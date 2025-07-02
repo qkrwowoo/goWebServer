@@ -1,0 +1,458 @@
+[19:07:26.715] > [DEBUG] >  [ LOG ] =================================================
+[19:07:26.715] > [DEBUG] > 	DIR = [./log]
+[19:07:26.716] > [DEBUG] > 	NAME = [grpcWeb]
+[19:07:26.716] > [DEBUG] > 	ENCYN = [n]
+[19:07:26.716] > [DEBUG] > 	LEVEL = [DEBUG,TRACE,ERROR,WARN,STDOUT]
+[19:07:26.716] > [DEBUG] >  [ DB ] =================================================
+[19:07:26.716] > [DEBUG] > 	THREAD = [10]
+[19:07:26.717] > [DEBUG] > 	TYPE = [MYSQL]
+[19:07:26.717] > [DEBUG] > 	ID = [root]
+[19:07:26.717] > [DEBUG] > 	PW = [123qwe]
+[19:07:26.717] > [DEBUG] > 	SID = [test]
+[19:07:26.717] > [DEBUG] > 	IP = [127.0.0.1]
+[19:07:26.718] > [DEBUG] > 	PORT = [3306]
+[19:07:26.718] > [DEBUG] > 	TIMEOUT = [1000]
+[19:07:26.719] > [DEBUG] >  [ REDIS ] =================================================
+[19:07:26.720] > [DEBUG] > 	PORT = [6379]
+[19:07:26.720] > [DEBUG] > 	TIMEOUT = [1000]
+[19:07:26.720] > [DEBUG] > 	THREAD = [10]
+[19:07:26.720] > [DEBUG] > 	ID = []
+[19:07:26.720] > [DEBUG] > 	PW = []
+[19:07:26.720] > [DEBUG] > 	SID = [0]
+[19:07:26.721] > [DEBUG] > 	IP = [127.0.0.1]
+[19:07:26.721] > [DEBUG] >  [ DEFAULT ] =================================================
+[19:07:26.721] > [DEBUG] >  [ COMMON ] =================================================
+[19:07:26.722] > [DEBUG] > 	PORT = [50051]
+[19:07:26.722] > [DEBUG] > connectQuery [127.0.0.1:3306][root:123qwe@tcp(127.0.0.1:3306)/test]
+[19:07:26.722] > [DEBUG] > connectQuery [127.0.0.1:3306][root:123qwe@tcp(127.0.0.1:3306)/test]
+[19:07:26.722] > [DEBUG] > connectQuery [127.0.0.1:3306][root:123qwe@tcp(127.0.0.1:3306)/test]
+[19:07:26.722] > [DEBUG] > connectQuery [127.0.0.1:3306][root:123qwe@tcp(127.0.0.1:3306)/test]
+[19:07:26.722] > [DEBUG] > connectQuery [127.0.0.1:3306][root:123qwe@tcp(127.0.0.1:3306)/test]
+[19:07:26.722] > [DEBUG] > connectQuery [127.0.0.1:3306][root:123qwe@tcp(127.0.0.1:3306)/test]
+[19:07:26.722] > [DEBUG] > connectQuery [127.0.0.1:3306][root:123qwe@tcp(127.0.0.1:3306)/test]
+[19:07:26.722] > [DEBUG] > connectQuery [127.0.0.1:3306][root:123qwe@tcp(127.0.0.1:3306)/test]
+[19:07:26.722] > [DEBUG] > connectQuery [127.0.0.1:3306][root:123qwe@tcp(127.0.0.1:3306)/test]
+[19:07:26.722] > [DEBUG] > connectQuery [127.0.0.1:3306][root:123qwe@tcp(127.0.0.1:3306)/test]
+[19:07:26.726] > [TRACE] > MySQL Connect Success
+[19:07:26.726] > [TRACE] > MySQL Connect Success
+[19:07:26.726] > [TRACE] > MySQL Connect Success
+[19:07:26.727] > [TRACE] > MySQL Connect Success
+[19:07:26.726] > [TRACE] > MySQL Connect Success
+[19:07:26.726] > [TRACE] > MySQL Connect Success
+[19:07:26.726] > [TRACE] > MySQL Connect Success
+[19:07:26.726] > [TRACE] > MySQL Connect Success
+[19:07:26.727] > [TRACE] > MySQL Connect Success
+[19:07:26.726] > [TRACE] > MySQL Connect Success
+[19:07:26.729] > [TRACE] > Redis Connect Success
+[19:07:26.729] > [TRACE] > Redis Connect Success
+[19:07:26.729] > [TRACE] > Redis Connect Success
+[19:07:26.729] > [TRACE] > Redis Connect Success
+[19:07:26.729] > [TRACE] > Redis Connect Success
+[19:07:26.729] > [TRACE] > Redis Connect Success
+[19:07:26.729] > [TRACE] > Redis Connect Success
+[19:07:26.729] > [TRACE] > Redis Connect Success
+[19:07:26.729] > [TRACE] > Redis Connect Success
+[19:07:26.729] > [TRACE] > Redis Connect Success
+[19:07:27.230] > [ ALL ] > =================================================
+[19:07:27.231] > [ ALL ] > 	 [./grpcWeb] START [:50051]
+[19:07:27.232] > [ ALL ] > =================================================
+[19:07:27.236] > [ ALL ] > 	 ### Open gRPC Server
+[19:07:32.677] > [TRACE] > [Register] Start [testuser2]
+[19:07:33.552] > [DEBUG] > [Register] db.Do Return [[]]
+[19:07:33.552] > [TRACE] > [Register] db.Do Success
+[19:07:33.552] > [TRACE] > [Register] End
+[19:07:36.060] > [TRACE] > [Login] Start [testuser2]
+[19:07:36.063] > [DEBUG] > [Register] db.Do Return [[map[UserPW:$2a$14$TgzKASc2IVlccnMNY9JfzeVN.09W5tmxxVxWvmgTzNoaxNcY3DVrq]]]
+[19:07:36.064] > [TRACE] > [Login] db.Do Success
+[19:07:36.863] > [41m[ERROR][0m > [Login] Wrong Password
+[19:08:00.413] > [TRACE] > [Register] Start [testuser]
+[19:08:01.235] > [DEBUG] > [Register] db.Do Return [[]]
+[19:08:01.235] > [TRACE] > [Register] db.Do Success
+[19:08:01.235] > [TRACE] > [Register] End
+[19:08:02.657] > [TRACE] > [Login] Start [testuser]
+[19:08:02.658] > [DEBUG] > [Register] db.Do Return [[map[UserPW:$2a$14$GXsZO2L/LZMYY1oiCMWKFewkIZaZj/8bMWxI1EbGJr.fYtCgnaEm6]]]
+[19:08:02.658] > [TRACE] > [Login] db.Do Success
+[19:08:03.515] > [TRACE] > [Login] Password Check ok
+[19:08:03.515] > [DEBUG] > [Login] Make JWT Token [eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NTE0NTQ0ODMsInVzZXJuYW1lIjoidGVzdHVzZXIifQ.FKjB4b2xxB7zAQ4RrU4wWiWcQI4Af9mpiv6BJyzqg1E]
+[19:08:03.518] > [TRACE] > [Login] Store JWT Token Success 
+[19:08:32.821] > [TRACE] > [GetUserInfo] Start [testuser]
+[19:08:32.822] > [DEBUG] > [GetUserInfo] db.Do Return [[map[LastLogin:2025-07-02 19:08:03 Status:active]]]
+[19:08:32.823] > [TRACE] > [GetUserInfo] db.Do Success
+[19:08:32.823] > [TRACE] > [GetUserInfo] End
+[19:08:49.848] > [TRACE] > [UpdateUserInfo] Start [testuser]
+[19:08:50.672] > [TRACE] > [UpdateUserInfo] Select Password Success
+[19:08:51.507] > [DEBUG] > [Register] db.Do Return [[]]
+[19:08:51.508] > [TRACE] > [UpdateUserInfo] Update Password Success
+[19:08:51.508] > [TRACE] > [UpdateUserInfo] End
+[19:09:22.031] > [TRACE] > [GetUserInfo] Start [testuser]
+[19:09:22.032] > [DEBUG] > [GetUserInfo] db.Do Return [[map[LastLogin:2025-07-02 19:08:03 Status:active]]]
+[19:09:22.033] > [TRACE] > [GetUserInfo] db.Do Success
+[19:09:22.033] > [TRACE] > [GetUserInfo] End
+[19:09:23.054] > [TRACE] > [GetUserInfo] Start [testuser]
+[19:09:23.055] > [DEBUG] > [GetUserInfo] db.Do Return [[map[LastLogin:2025-07-02 19:08:03 Status:active]]]
+[19:09:23.056] > [TRACE] > [GetUserInfo] db.Do Success
+[19:09:23.057] > [TRACE] > [GetUserInfo] End
+[19:09:23.568] > [TRACE] > [GetUserInfo] Start [testuser]
+[19:09:23.569] > [DEBUG] > [GetUserInfo] db.Do Return [[map[LastLogin:2025-07-02 19:08:03 Status:active]]]
+[19:09:23.569] > [TRACE] > [GetUserInfo] db.Do Success
+[19:09:23.569] > [TRACE] > [GetUserInfo] End
+[19:09:23.828] > [TRACE] > [GetUserInfo] Start [testuser]
+[19:09:23.829] > [DEBUG] > [GetUserInfo] db.Do Return [[map[LastLogin:2025-07-02 19:08:03 Status:active]]]
+[19:09:23.829] > [TRACE] > [GetUserInfo] db.Do Success
+[19:09:23.829] > [TRACE] > [GetUserInfo] End
+[19:09:24.083] > [TRACE] > [GetUserInfo] Start [testuser]
+[19:09:24.084] > [DEBUG] > [GetUserInfo] db.Do Return [[map[LastLogin:2025-07-02 19:08:03 Status:active]]]
+[19:09:24.085] > [TRACE] > [GetUserInfo] db.Do Success
+[19:09:24.085] > [TRACE] > [GetUserInfo] End
+[19:09:24.297] > [TRACE] > [GetUserInfo] Start [testuser]
+[19:09:24.298] > [DEBUG] > [GetUserInfo] db.Do Return [[map[LastLogin:2025-07-02 19:08:03 Status:active]]]
+[19:09:24.298] > [TRACE] > [GetUserInfo] db.Do Success
+[19:09:24.298] > [TRACE] > [GetUserInfo] End
+[19:09:24.505] > [TRACE] > [GetUserInfo] Start [testuser]
+[19:09:24.506] > [DEBUG] > [GetUserInfo] db.Do Return [[map[LastLogin:2025-07-02 19:08:03 Status:active]]]
+[19:09:24.507] > [TRACE] > [GetUserInfo] db.Do Success
+[19:09:24.507] > [TRACE] > [GetUserInfo] End
+[19:09:24.711] > [TRACE] > [GetUserInfo] Start [testuser]
+[19:09:24.712] > [DEBUG] > [GetUserInfo] db.Do Return [[map[LastLogin:2025-07-02 19:08:03 Status:active]]]
+[19:09:24.713] > [TRACE] > [GetUserInfo] db.Do Success
+[19:09:24.713] > [TRACE] > [GetUserInfo] End
+[19:09:24.933] > [TRACE] > [GetUserInfo] Start [testuser]
+[19:09:24.933] > [DEBUG] > [GetUserInfo] db.Do Return [[map[LastLogin:2025-07-02 19:08:03 Status:active]]]
+[19:09:24.934] > [TRACE] > [GetUserInfo] db.Do Success
+[19:09:24.934] > [TRACE] > [GetUserInfo] End
+[19:09:25.154] > [TRACE] > [GetUserInfo] Start [testuser]
+[19:09:25.155] > [DEBUG] > [GetUserInfo] db.Do Return [[map[LastLogin:2025-07-02 19:08:03 Status:active]]]
+[19:09:25.155] > [TRACE] > [GetUserInfo] db.Do Success
+[19:09:25.156] > [TRACE] > [GetUserInfo] End
+[19:09:25.377] > [TRACE] > [GetUserInfo] Start [testuser]
+[19:09:25.378] > [DEBUG] > [GetUserInfo] db.Do Return [[map[LastLogin:2025-07-02 19:08:03 Status:active]]]
+[19:09:25.378] > [TRACE] > [GetUserInfo] db.Do Success
+[19:09:25.379] > [TRACE] > [GetUserInfo] End
+[19:09:25.590] > [TRACE] > [GetUserInfo] Start [testuser]
+[19:09:25.590] > [DEBUG] > [GetUserInfo] db.Do Return [[map[LastLogin:2025-07-02 19:08:03 Status:active]]]
+[19:09:25.591] > [TRACE] > [GetUserInfo] db.Do Success
+[19:09:25.591] > [TRACE] > [GetUserInfo] End
+[19:09:25.819] > [TRACE] > [GetUserInfo] Start [testuser]
+[19:09:25.820] > [DEBUG] > [GetUserInfo] db.Do Return [[map[LastLogin:2025-07-02 19:08:03 Status:active]]]
+[19:09:25.820] > [TRACE] > [GetUserInfo] db.Do Success
+[19:09:25.821] > [TRACE] > [GetUserInfo] End
+[19:09:26.062] > [TRACE] > [GetUserInfo] Start [testuser]
+[19:09:26.063] > [DEBUG] > [GetUserInfo] db.Do Return [[map[LastLogin:2025-07-02 19:08:03 Status:active]]]
+[19:09:26.063] > [TRACE] > [GetUserInfo] db.Do Success
+[19:09:26.064] > [TRACE] > [GetUserInfo] End
+[19:09:26.286] > [TRACE] > [GetUserInfo] Start [testuser]
+[19:09:26.288] > [DEBUG] > [GetUserInfo] db.Do Return [[map[LastLogin:2025-07-02 19:08:03 Status:active]]]
+[19:09:26.288] > [TRACE] > [GetUserInfo] db.Do Success
+[19:09:26.289] > [TRACE] > [GetUserInfo] End
+[19:09:26.527] > [TRACE] > [GetUserInfo] Start [testuser]
+[19:09:26.528] > [DEBUG] > [GetUserInfo] db.Do Return [[map[LastLogin:2025-07-02 19:08:03 Status:active]]]
+[19:09:26.529] > [TRACE] > [GetUserInfo] db.Do Success
+[19:09:26.529] > [TRACE] > [GetUserInfo] End
+[19:09:26.776] > [TRACE] > [GetUserInfo] Start [testuser]
+[19:09:26.777] > [DEBUG] > [GetUserInfo] db.Do Return [[map[LastLogin:2025-07-02 19:08:03 Status:active]]]
+[19:09:26.778] > [TRACE] > [GetUserInfo] db.Do Success
+[19:09:26.778] > [TRACE] > [GetUserInfo] End
+[19:09:27.008] > [TRACE] > [GetUserInfo] Start [testuser]
+[19:09:27.009] > [DEBUG] > [GetUserInfo] db.Do Return [[map[LastLogin:2025-07-02 19:08:03 Status:active]]]
+[19:09:27.010] > [TRACE] > [GetUserInfo] db.Do Success
+[19:09:27.010] > [TRACE] > [GetUserInfo] End
+[19:09:27.258] > [TRACE] > [GetUserInfo] Start [testuser]
+[19:09:27.259] > [DEBUG] > [GetUserInfo] db.Do Return [[map[LastLogin:2025-07-02 19:08:03 Status:active]]]
+[19:09:27.260] > [TRACE] > [GetUserInfo] db.Do Success
+[19:09:27.260] > [TRACE] > [GetUserInfo] End
+[19:09:27.508] > [TRACE] > [GetUserInfo] Start [testuser]
+[19:09:27.509] > [DEBUG] > [GetUserInfo] db.Do Return [[map[LastLogin:2025-07-02 19:08:03 Status:active]]]
+[19:09:27.509] > [TRACE] > [GetUserInfo] db.Do Success
+[19:09:27.509] > [TRACE] > [GetUserInfo] End
+[19:09:27.719] > [TRACE] > [GetUserInfo] Start [testuser]
+[19:09:27.720] > [DEBUG] > [GetUserInfo] db.Do Return [[map[LastLogin:2025-07-02 19:08:03 Status:active]]]
+[19:09:27.720] > [TRACE] > [GetUserInfo] db.Do Success
+[19:09:27.720] > [TRACE] > [GetUserInfo] End
+[19:09:27.953] > [TRACE] > [GetUserInfo] Start [testuser]
+[19:09:27.954] > [DEBUG] > [GetUserInfo] db.Do Return [[map[LastLogin:2025-07-02 19:08:03 Status:active]]]
+[19:09:27.955] > [TRACE] > [GetUserInfo] db.Do Success
+[19:09:27.955] > [TRACE] > [GetUserInfo] End
+[19:09:28.204] > [TRACE] > [GetUserInfo] Start [testuser]
+[19:09:28.205] > [DEBUG] > [GetUserInfo] db.Do Return [[map[LastLogin:2025-07-02 19:08:03 Status:active]]]
+[19:09:28.205] > [TRACE] > [GetUserInfo] db.Do Success
+[19:09:28.205] > [TRACE] > [GetUserInfo] End
+[19:09:28.430] > [TRACE] > [GetUserInfo] Start [testuser]
+[19:09:28.431] > [DEBUG] > [GetUserInfo] db.Do Return [[map[LastLogin:2025-07-02 19:08:03 Status:active]]]
+[19:09:28.432] > [TRACE] > [GetUserInfo] db.Do Success
+[19:09:28.432] > [TRACE] > [GetUserInfo] End
+[19:09:28.667] > [TRACE] > [GetUserInfo] Start [testuser]
+[19:09:28.668] > [DEBUG] > [GetUserInfo] db.Do Return [[map[LastLogin:2025-07-02 19:08:03 Status:active]]]
+[19:09:28.668] > [TRACE] > [GetUserInfo] db.Do Success
+[19:09:28.668] > [TRACE] > [GetUserInfo] End
+[19:09:28.907] > [TRACE] > [GetUserInfo] Start [testuser]
+[19:09:28.909] > [DEBUG] > [GetUserInfo] db.Do Return [[map[LastLogin:2025-07-02 19:08:03 Status:active]]]
+[19:09:28.909] > [TRACE] > [GetUserInfo] db.Do Success
+[19:09:28.910] > [TRACE] > [GetUserInfo] End
+[19:09:29.675] > [TRACE] > [GetUserInfo] Start [testuser]
+[19:09:29.675] > [DEBUG] > [GetUserInfo] db.Do Return [[map[LastLogin:2025-07-02 19:08:03 Status:active]]]
+[19:09:29.676] > [TRACE] > [GetUserInfo] db.Do Success
+[19:09:29.676] > [TRACE] > [GetUserInfo] End
+[19:09:29.903] > [TRACE] > [GetUserInfo] Start [testuser]
+[19:09:29.905] > [DEBUG] > [GetUserInfo] db.Do Return [[map[LastLogin:2025-07-02 19:08:03 Status:active]]]
+[19:09:29.905] > [TRACE] > [GetUserInfo] db.Do Success
+[19:09:29.906] > [TRACE] > [GetUserInfo] End
+[19:09:30.152] > [TRACE] > [GetUserInfo] Start [testuser]
+[19:09:30.153] > [DEBUG] > [GetUserInfo] db.Do Return [[map[LastLogin:2025-07-02 19:08:03 Status:active]]]
+[19:09:30.153] > [TRACE] > [GetUserInfo] db.Do Success
+[19:09:30.153] > [TRACE] > [GetUserInfo] End
+[19:09:30.389] > [TRACE] > [GetUserInfo] Start [testuser]
+[19:09:30.390] > [DEBUG] > [GetUserInfo] db.Do Return [[map[LastLogin:2025-07-02 19:08:03 Status:active]]]
+[19:09:30.391] > [TRACE] > [GetUserInfo] db.Do Success
+[19:09:30.391] > [TRACE] > [GetUserInfo] End
+[19:09:30.616] > [TRACE] > [GetUserInfo] Start [testuser]
+[19:09:30.618] > [DEBUG] > [GetUserInfo] db.Do Return [[map[LastLogin:2025-07-02 19:08:03 Status:active]]]
+[19:09:30.618] > [TRACE] > [GetUserInfo] db.Do Success
+[19:09:30.618] > [TRACE] > [GetUserInfo] End
+[19:09:30.857] > [TRACE] > [GetUserInfo] Start [testuser]
+[19:09:30.858] > [DEBUG] > [GetUserInfo] db.Do Return [[map[LastLogin:2025-07-02 19:08:03 Status:active]]]
+[19:09:30.858] > [TRACE] > [GetUserInfo] db.Do Success
+[19:09:30.859] > [TRACE] > [GetUserInfo] End
+[19:09:31.095] > [TRACE] > [GetUserInfo] Start [testuser]
+[19:09:31.096] > [DEBUG] > [GetUserInfo] db.Do Return [[map[LastLogin:2025-07-02 19:08:03 Status:active]]]
+[19:09:31.097] > [TRACE] > [GetUserInfo] db.Do Success
+[19:09:31.097] > [TRACE] > [GetUserInfo] End
+[19:09:31.344] > [TRACE] > [GetUserInfo] Start [testuser]
+[19:09:31.345] > [DEBUG] > [GetUserInfo] db.Do Return [[map[LastLogin:2025-07-02 19:08:03 Status:active]]]
+[19:09:31.345] > [TRACE] > [GetUserInfo] db.Do Success
+[19:09:31.346] > [TRACE] > [GetUserInfo] End
+[19:09:31.578] > [TRACE] > [GetUserInfo] Start [testuser]
+[19:09:31.579] > [DEBUG] > [GetUserInfo] db.Do Return [[map[LastLogin:2025-07-02 19:08:03 Status:active]]]
+[19:09:31.579] > [TRACE] > [GetUserInfo] db.Do Success
+[19:09:31.579] > [TRACE] > [GetUserInfo] End
+[19:09:31.840] > [TRACE] > [GetUserInfo] Start [testuser]
+[19:09:31.841] > [DEBUG] > [GetUserInfo] db.Do Return [[map[LastLogin:2025-07-02 19:08:03 Status:active]]]
+[19:09:31.841] > [TRACE] > [GetUserInfo] db.Do Success
+[19:09:31.841] > [TRACE] > [GetUserInfo] End
+[19:09:32.097] > [TRACE] > [GetUserInfo] Start [testuser]
+[19:09:32.098] > [DEBUG] > [GetUserInfo] db.Do Return [[map[LastLogin:2025-07-02 19:08:03 Status:active]]]
+[19:09:32.098] > [TRACE] > [GetUserInfo] db.Do Success
+[19:09:32.099] > [TRACE] > [GetUserInfo] End
+[19:09:32.368] > [TRACE] > [GetUserInfo] Start [testuser]
+[19:09:32.369] > [DEBUG] > [GetUserInfo] db.Do Return [[map[LastLogin:2025-07-02 19:08:03 Status:active]]]
+[19:09:32.369] > [TRACE] > [GetUserInfo] db.Do Success
+[19:09:32.369] > [TRACE] > [GetUserInfo] End
+[19:09:32.636] > [TRACE] > [GetUserInfo] Start [testuser]
+[19:09:32.637] > [DEBUG] > [GetUserInfo] db.Do Return [[map[LastLogin:2025-07-02 19:08:03 Status:active]]]
+[19:09:32.637] > [TRACE] > [GetUserInfo] db.Do Success
+[19:09:32.637] > [TRACE] > [GetUserInfo] End
+[19:09:32.889] > [TRACE] > [GetUserInfo] Start [testuser]
+[19:09:32.890] > [DEBUG] > [GetUserInfo] db.Do Return [[map[LastLogin:2025-07-02 19:08:03 Status:active]]]
+[19:09:32.890] > [TRACE] > [GetUserInfo] db.Do Success
+[19:09:32.890] > [TRACE] > [GetUserInfo] End
+[19:09:33.178] > [TRACE] > [GetUserInfo] Start [testuser]
+[19:09:33.179] > [DEBUG] > [GetUserInfo] db.Do Return [[map[LastLogin:2025-07-02 19:08:03 Status:active]]]
+[19:09:33.179] > [TRACE] > [GetUserInfo] db.Do Success
+[19:09:33.180] > [TRACE] > [GetUserInfo] End
+[19:09:33.373] > [TRACE] > [GetUserInfo] Start [testuser]
+[19:09:33.374] > [DEBUG] > [GetUserInfo] db.Do Return [[map[LastLogin:2025-07-02 19:08:03 Status:active]]]
+[19:09:33.374] > [TRACE] > [GetUserInfo] db.Do Success
+[19:09:33.374] > [TRACE] > [GetUserInfo] End
+[19:09:33.622] > [TRACE] > [GetUserInfo] Start [testuser]
+[19:09:33.623] > [DEBUG] > [GetUserInfo] db.Do Return [[map[LastLogin:2025-07-02 19:08:03 Status:active]]]
+[19:09:33.624] > [TRACE] > [GetUserInfo] db.Do Success
+[19:09:33.624] > [TRACE] > [GetUserInfo] End
+[19:09:33.859] > [TRACE] > [GetUserInfo] Start [testuser]
+[19:09:33.860] > [DEBUG] > [GetUserInfo] db.Do Return [[map[LastLogin:2025-07-02 19:08:03 Status:active]]]
+[19:09:33.861] > [TRACE] > [GetUserInfo] db.Do Success
+[19:09:33.861] > [TRACE] > [GetUserInfo] End
+[19:09:34.109] > [TRACE] > [GetUserInfo] Start [testuser]
+[19:09:34.110] > [DEBUG] > [GetUserInfo] db.Do Return [[map[LastLogin:2025-07-02 19:08:03 Status:active]]]
+[19:09:34.111] > [TRACE] > [GetUserInfo] db.Do Success
+[19:09:34.111] > [TRACE] > [GetUserInfo] End
+[19:09:34.358] > [TRACE] > [GetUserInfo] Start [testuser]
+[19:09:34.359] > [DEBUG] > [GetUserInfo] db.Do Return [[map[LastLogin:2025-07-02 19:08:03 Status:active]]]
+[19:09:34.359] > [TRACE] > [GetUserInfo] db.Do Success
+[19:09:34.360] > [TRACE] > [GetUserInfo] End
+[19:09:34.601] > [TRACE] > [GetUserInfo] Start [testuser]
+[19:09:34.602] > [DEBUG] > [GetUserInfo] db.Do Return [[map[LastLogin:2025-07-02 19:08:03 Status:active]]]
+[19:09:34.602] > [TRACE] > [GetUserInfo] db.Do Success
+[19:09:34.602] > [TRACE] > [GetUserInfo] End
+[19:09:34.847] > [TRACE] > [GetUserInfo] Start [testuser]
+[19:09:34.848] > [DEBUG] > [GetUserInfo] db.Do Return [[map[LastLogin:2025-07-02 19:08:03 Status:active]]]
+[19:09:34.849] > [TRACE] > [GetUserInfo] db.Do Success
+[19:09:34.849] > [TRACE] > [GetUserInfo] End
+[19:09:35.109] > [TRACE] > [GetUserInfo] Start [testuser]
+[19:09:35.110] > [DEBUG] > [GetUserInfo] db.Do Return [[map[LastLogin:2025-07-02 19:08:03 Status:active]]]
+[19:09:35.111] > [TRACE] > [GetUserInfo] db.Do Success
+[19:09:35.111] > [TRACE] > [GetUserInfo] End
+[19:09:35.358] > [TRACE] > [GetUserInfo] Start [testuser]
+[19:09:35.359] > [DEBUG] > [GetUserInfo] db.Do Return [[map[LastLogin:2025-07-02 19:08:03 Status:active]]]
+[19:09:35.359] > [TRACE] > [GetUserInfo] db.Do Success
+[19:09:35.360] > [TRACE] > [GetUserInfo] End
+[19:09:35.610] > [TRACE] > [GetUserInfo] Start [testuser]
+[19:09:35.612] > [DEBUG] > [GetUserInfo] db.Do Return [[map[LastLogin:2025-07-02 19:08:03 Status:active]]]
+[19:09:35.612] > [TRACE] > [GetUserInfo] db.Do Success
+[19:09:35.612] > [TRACE] > [GetUserInfo] End
+[19:09:35.881] > [TRACE] > [GetUserInfo] Start [testuser]
+[19:09:35.882] > [DEBUG] > [GetUserInfo] db.Do Return [[map[LastLogin:2025-07-02 19:08:03 Status:active]]]
+[19:09:35.882] > [TRACE] > [GetUserInfo] db.Do Success
+[19:09:35.883] > [TRACE] > [GetUserInfo] End
+[19:09:36.141] > [TRACE] > [GetUserInfo] Start [testuser]
+[19:09:36.143] > [DEBUG] > [GetUserInfo] db.Do Return [[map[LastLogin:2025-07-02 19:08:03 Status:active]]]
+[19:09:36.143] > [TRACE] > [GetUserInfo] db.Do Success
+[19:09:36.143] > [TRACE] > [GetUserInfo] End
+[19:09:36.412] > [TRACE] > [GetUserInfo] Start [testuser]
+[19:09:36.413] > [DEBUG] > [GetUserInfo] db.Do Return [[map[LastLogin:2025-07-02 19:08:03 Status:active]]]
+[19:09:36.413] > [TRACE] > [GetUserInfo] db.Do Success
+[19:09:36.414] > [TRACE] > [GetUserInfo] End
+[19:09:36.658] > [TRACE] > [GetUserInfo] Start [testuser]
+[19:09:36.659] > [DEBUG] > [GetUserInfo] db.Do Return [[map[LastLogin:2025-07-02 19:08:03 Status:active]]]
+[19:09:36.659] > [TRACE] > [GetUserInfo] db.Do Success
+[19:09:36.660] > [TRACE] > [GetUserInfo] End
+[19:09:36.887] > [TRACE] > [GetUserInfo] Start [testuser]
+[19:09:36.889] > [DEBUG] > [GetUserInfo] db.Do Return [[map[LastLogin:2025-07-02 19:08:03 Status:active]]]
+[19:09:36.889] > [TRACE] > [GetUserInfo] db.Do Success
+[19:09:36.890] > [TRACE] > [GetUserInfo] End
+[19:09:37.124] > [TRACE] > [GetUserInfo] Start [testuser]
+[19:09:37.125] > [DEBUG] > [GetUserInfo] db.Do Return [[map[LastLogin:2025-07-02 19:08:03 Status:active]]]
+[19:09:37.125] > [TRACE] > [GetUserInfo] db.Do Success
+[19:09:37.126] > [TRACE] > [GetUserInfo] End
+[19:09:37.371] > [TRACE] > [GetUserInfo] Start [testuser]
+[19:09:37.372] > [DEBUG] > [GetUserInfo] db.Do Return [[map[LastLogin:2025-07-02 19:08:03 Status:active]]]
+[19:09:37.373] > [TRACE] > [GetUserInfo] db.Do Success
+[19:09:37.373] > [TRACE] > [GetUserInfo] End
+[19:09:37.607] > [TRACE] > [GetUserInfo] Start [testuser]
+[19:09:37.607] > [DEBUG] > [GetUserInfo] db.Do Return [[map[LastLogin:2025-07-02 19:08:03 Status:active]]]
+[19:09:37.608] > [TRACE] > [GetUserInfo] db.Do Success
+[19:09:37.608] > [TRACE] > [GetUserInfo] End
+[19:09:37.846] > [TRACE] > [GetUserInfo] Start [testuser]
+[19:09:37.848] > [DEBUG] > [GetUserInfo] db.Do Return [[map[LastLogin:2025-07-02 19:08:03 Status:active]]]
+[19:09:37.848] > [TRACE] > [GetUserInfo] db.Do Success
+[19:09:37.849] > [TRACE] > [GetUserInfo] End
+[19:09:38.098] > [TRACE] > [GetUserInfo] Start [testuser]
+[19:09:38.099] > [DEBUG] > [GetUserInfo] db.Do Return [[map[LastLogin:2025-07-02 19:08:03 Status:active]]]
+[19:09:38.099] > [TRACE] > [GetUserInfo] db.Do Success
+[19:09:38.099] > [TRACE] > [GetUserInfo] End
+[19:09:38.360] > [TRACE] > [GetUserInfo] Start [testuser]
+[19:09:38.361] > [DEBUG] > [GetUserInfo] db.Do Return [[map[LastLogin:2025-07-02 19:08:03 Status:active]]]
+[19:09:38.362] > [TRACE] > [GetUserInfo] db.Do Success
+[19:09:38.362] > [TRACE] > [GetUserInfo] End
+[19:09:38.587] > [TRACE] > [GetUserInfo] Start [testuser]
+[19:09:38.588] > [DEBUG] > [GetUserInfo] db.Do Return [[map[LastLogin:2025-07-02 19:08:03 Status:active]]]
+[19:09:38.588] > [TRACE] > [GetUserInfo] db.Do Success
+[19:09:38.588] > [TRACE] > [GetUserInfo] End
+[19:09:38.824] > [TRACE] > [GetUserInfo] Start [testuser]
+[19:09:38.825] > [DEBUG] > [GetUserInfo] db.Do Return [[map[LastLogin:2025-07-02 19:08:03 Status:active]]]
+[19:09:38.825] > [TRACE] > [GetUserInfo] db.Do Success
+[19:09:38.826] > [TRACE] > [GetUserInfo] End
+[19:09:39.097] > [TRACE] > [GetUserInfo] Start [testuser]
+[19:09:39.099] > [DEBUG] > [GetUserInfo] db.Do Return [[map[LastLogin:2025-07-02 19:08:03 Status:active]]]
+[19:09:39.099] > [TRACE] > [GetUserInfo] db.Do Success
+[19:09:39.099] > [TRACE] > [GetUserInfo] End
+[19:09:39.359] > [TRACE] > [GetUserInfo] Start [testuser]
+[19:09:39.360] > [DEBUG] > [GetUserInfo] db.Do Return [[map[LastLogin:2025-07-02 19:08:03 Status:active]]]
+[19:09:39.360] > [TRACE] > [GetUserInfo] db.Do Success
+[19:09:39.360] > [TRACE] > [GetUserInfo] End
+[19:09:39.594] > [TRACE] > [GetUserInfo] Start [testuser]
+[19:09:39.595] > [DEBUG] > [GetUserInfo] db.Do Return [[map[LastLogin:2025-07-02 19:08:03 Status:active]]]
+[19:09:39.595] > [TRACE] > [GetUserInfo] db.Do Success
+[19:09:39.595] > [TRACE] > [GetUserInfo] End
+[19:09:39.819] > [TRACE] > [GetUserInfo] Start [testuser]
+[19:09:39.820] > [DEBUG] > [GetUserInfo] db.Do Return [[map[LastLogin:2025-07-02 19:08:03 Status:active]]]
+[19:09:39.821] > [TRACE] > [GetUserInfo] db.Do Success
+[19:09:39.821] > [TRACE] > [GetUserInfo] End
+[19:09:40.057] > [TRACE] > [GetUserInfo] Start [testuser]
+[19:09:40.058] > [DEBUG] > [GetUserInfo] db.Do Return [[map[LastLogin:2025-07-02 19:08:03 Status:active]]]
+[19:09:40.058] > [TRACE] > [GetUserInfo] db.Do Success
+[19:09:40.059] > [TRACE] > [GetUserInfo] End
+[19:09:40.284] > [TRACE] > [GetUserInfo] Start [testuser]
+[19:09:40.285] > [DEBUG] > [GetUserInfo] db.Do Return [[map[LastLogin:2025-07-02 19:08:03 Status:active]]]
+[19:09:40.285] > [TRACE] > [GetUserInfo] db.Do Success
+[19:09:40.286] > [TRACE] > [GetUserInfo] End
+[19:09:40.527] > [TRACE] > [GetUserInfo] Start [testuser]
+[19:09:40.529] > [DEBUG] > [GetUserInfo] db.Do Return [[map[LastLogin:2025-07-02 19:08:03 Status:active]]]
+[19:09:40.529] > [TRACE] > [GetUserInfo] db.Do Success
+[19:09:40.529] > [TRACE] > [GetUserInfo] End
+[19:09:40.770] > [TRACE] > [GetUserInfo] Start [testuser]
+[19:09:40.771] > [DEBUG] > [GetUserInfo] db.Do Return [[map[LastLogin:2025-07-02 19:08:03 Status:active]]]
+[19:09:40.771] > [TRACE] > [GetUserInfo] db.Do Success
+[19:09:40.772] > [TRACE] > [GetUserInfo] End
+[19:09:41.036] > [TRACE] > [GetUserInfo] Start [testuser]
+[19:09:41.038] > [DEBUG] > [GetUserInfo] db.Do Return [[map[LastLogin:2025-07-02 19:08:03 Status:active]]]
+[19:09:41.038] > [TRACE] > [GetUserInfo] db.Do Success
+[19:09:41.038] > [TRACE] > [GetUserInfo] End
+[19:09:41.267] > [TRACE] > [GetUserInfo] Start [testuser]
+[19:09:41.268] > [DEBUG] > [GetUserInfo] db.Do Return [[map[LastLogin:2025-07-02 19:08:03 Status:active]]]
+[19:09:41.269] > [TRACE] > [GetUserInfo] db.Do Success
+[19:09:41.269] > [TRACE] > [GetUserInfo] End
+[19:09:41.510] > [TRACE] > [GetUserInfo] Start [testuser]
+[19:09:41.511] > [DEBUG] > [GetUserInfo] db.Do Return [[map[LastLogin:2025-07-02 19:08:03 Status:active]]]
+[19:09:41.511] > [TRACE] > [GetUserInfo] db.Do Success
+[19:09:41.511] > [TRACE] > [GetUserInfo] End
+[19:09:41.755] > [TRACE] > [GetUserInfo] Start [testuser]
+[19:09:41.756] > [DEBUG] > [GetUserInfo] db.Do Return [[map[LastLogin:2025-07-02 19:08:03 Status:active]]]
+[19:09:41.756] > [TRACE] > [GetUserInfo] db.Do Success
+[19:09:41.757] > [TRACE] > [GetUserInfo] End
+[19:09:42.019] > [TRACE] > [GetUserInfo] Start [testuser]
+[19:09:42.020] > [DEBUG] > [GetUserInfo] db.Do Return [[map[LastLogin:2025-07-02 19:08:03 Status:active]]]
+[19:09:42.021] > [TRACE] > [GetUserInfo] db.Do Success
+[19:09:42.021] > [TRACE] > [GetUserInfo] End
+[19:09:42.277] > [TRACE] > [GetUserInfo] Start [testuser]
+[19:09:42.277] > [DEBUG] > [GetUserInfo] db.Do Return [[map[LastLogin:2025-07-02 19:08:03 Status:active]]]
+[19:09:42.278] > [TRACE] > [GetUserInfo] db.Do Success
+[19:09:42.278] > [TRACE] > [GetUserInfo] End
+[19:09:42.516] > [TRACE] > [GetUserInfo] Start [testuser]
+[19:09:42.517] > [DEBUG] > [GetUserInfo] db.Do Return [[map[LastLogin:2025-07-02 19:08:03 Status:active]]]
+[19:09:42.517] > [TRACE] > [GetUserInfo] db.Do Success
+[19:09:42.517] > [TRACE] > [GetUserInfo] End
+[19:09:42.761] > [TRACE] > [GetUserInfo] Start [testuser]
+[19:09:42.762] > [DEBUG] > [GetUserInfo] db.Do Return [[map[LastLogin:2025-07-02 19:08:03 Status:active]]]
+[19:09:42.763] > [TRACE] > [GetUserInfo] db.Do Success
+[19:09:42.763] > [TRACE] > [GetUserInfo] End
+[19:09:43.011] > [TRACE] > [GetUserInfo] Start [testuser]
+[19:09:43.012] > [DEBUG] > [GetUserInfo] db.Do Return [[map[LastLogin:2025-07-02 19:08:03 Status:active]]]
+[19:09:43.012] > [TRACE] > [GetUserInfo] db.Do Success
+[19:09:43.013] > [TRACE] > [GetUserInfo] End
+[19:09:43.270] > [TRACE] > [GetUserInfo] Start [testuser]
+[19:09:43.271] > [DEBUG] > [GetUserInfo] db.Do Return [[map[LastLogin:2025-07-02 19:08:03 Status:active]]]
+[19:09:43.271] > [TRACE] > [GetUserInfo] db.Do Success
+[19:09:43.272] > [TRACE] > [GetUserInfo] End
+[19:09:43.527] > [TRACE] > [GetUserInfo] Start [testuser]
+[19:09:43.528] > [DEBUG] > [GetUserInfo] db.Do Return [[map[LastLogin:2025-07-02 19:08:03 Status:active]]]
+[19:09:43.529] > [TRACE] > [GetUserInfo] db.Do Success
+[19:09:43.529] > [TRACE] > [GetUserInfo] End
+[19:09:43.797] > [TRACE] > [GetUserInfo] Start [testuser]
+[19:09:43.798] > [DEBUG] > [GetUserInfo] db.Do Return [[map[LastLogin:2025-07-02 19:08:03 Status:active]]]
+[19:09:43.798] > [TRACE] > [GetUserInfo] db.Do Success
+[19:09:43.799] > [TRACE] > [GetUserInfo] End
+[19:09:44.039] > [TRACE] > [GetUserInfo] Start [testuser]
+[19:09:44.041] > [DEBUG] > [GetUserInfo] db.Do Return [[map[LastLogin:2025-07-02 19:08:03 Status:active]]]
+[19:09:44.041] > [TRACE] > [GetUserInfo] db.Do Success
+[19:09:44.042] > [TRACE] > [GetUserInfo] End
+[19:09:44.301] > [TRACE] > [GetUserInfo] Start [testuser]
+[19:09:44.301] > [DEBUG] > [GetUserInfo] db.Do Return [[map[LastLogin:2025-07-02 19:08:03 Status:active]]]
+[19:09:44.302] > [TRACE] > [GetUserInfo] db.Do Success
+[19:09:44.302] > [TRACE] > [GetUserInfo] End
+[19:09:44.539] > [TRACE] > [GetUserInfo] Start [testuser]
+[19:09:44.540] > [DEBUG] > [GetUserInfo] db.Do Return [[map[LastLogin:2025-07-02 19:08:03 Status:active]]]
+[19:09:44.540] > [TRACE] > [GetUserInfo] db.Do Success
+[19:09:44.541] > [TRACE] > [GetUserInfo] End
+[19:09:44.785] > [TRACE] > [GetUserInfo] Start [testuser]
+[19:09:44.786] > [DEBUG] > [GetUserInfo] db.Do Return [[map[LastLogin:2025-07-02 19:08:03 Status:active]]]
+[19:09:44.786] > [TRACE] > [GetUserInfo] db.Do Success
+[19:09:44.786] > [TRACE] > [GetUserInfo] End
+[19:09:45.038] > [TRACE] > [GetUserInfo] Start [testuser]
+[19:09:45.039] > [DEBUG] > [GetUserInfo] db.Do Return [[map[LastLogin:2025-07-02 19:08:03 Status:active]]]
+[19:09:45.039] > [TRACE] > [GetUserInfo] db.Do Success
+[19:09:45.039] > [TRACE] > [GetUserInfo] End
+[19:09:45.303] > [TRACE] > [GetUserInfo] Start [testuser]
+[19:09:45.305] > [DEBUG] > [GetUserInfo] db.Do Return [[map[LastLogin:2025-07-02 19:08:03 Status:active]]]
+[19:09:45.305] > [TRACE] > [GetUserInfo] db.Do Success
+[19:09:45.305] > [TRACE] > [GetUserInfo] End
+[19:09:45.542] > [TRACE] > [GetUserInfo] Start [testuser]
+[19:09:45.543] > [DEBUG] > [GetUserInfo] db.Do Return [[map[LastLogin:2025-07-02 19:08:03 Status:active]]]
+[19:09:45.543] > [TRACE] > [GetUserInfo] db.Do Success
+[19:09:45.544] > [TRACE] > [GetUserInfo] End
+[19:09:45.786] > [TRACE] > [GetUserInfo] Start [testuser]
+[19:09:45.787] > [DEBUG] > [GetUserInfo] db.Do Return [[map[LastLogin:2025-07-02 19:08:03 Status:active]]]
+[19:09:45.788] > [TRACE] > [GetUserInfo] db.Do Success
+[19:09:45.788] > [TRACE] > [GetUserInfo] End
+[19:09:46.051] > [TRACE] > [GetUserInfo] Start [testuser]
+[19:09:46.052] > [DEBUG] > [GetUserInfo] db.Do Return [[map[LastLogin:2025-07-02 19:08:03 Status:active]]]
+[19:09:46.052] > [TRACE] > [GetUserInfo] db.Do Success
+[19:09:46.052] > [TRACE] > [GetUserInfo] End
