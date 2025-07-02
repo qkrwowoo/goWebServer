@@ -1,12 +1,12 @@
 import requests
 
-url = "http://15.165.161.150:8080/login"
+url = "http://13.125.250.202:8080/login"
 #url = "http://127.0.0.1:8080/login"
 headers = {
     "Content-Type": "application/json"
 }
 data = {
-    "UserID": "testuser1",
+    "UserID": "testuser",
     "UserPW": "password123",
     "DbType": "mysql"
 }

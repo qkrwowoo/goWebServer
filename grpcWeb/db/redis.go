@@ -85,7 +85,7 @@ func redis_AllOpen(in interface{}) error {
 			defer cancel()
 			conn, err := redis_Open(r.DB, &ctx)
 			if err != nil {
-				r.connQueue.PushQ(redis.Client{})
+				r.connQueue.PushQ(&redis.Client{})
 				return
 			} else {
 				r.Conn[index] = conn.(*redis.Client)
@@ -122,7 +122,7 @@ func (r *my_redis) GetDBConn(ctx *context.Context) (interface{}, error) {
 		c.Logging.Write(c.LogWARN, "DB Connection Broken[%s]... Try ReConnect ", err.Error())
 		temp, err = r.DB.Open(r.DB, ctx)
 		if err != nil {
-			r.connQueue.PushQ(redis.Client{})
+			r.connQueue.PushQ(&redis.Client{})
 			return nil, err
 		} else {
 			return temp, nil

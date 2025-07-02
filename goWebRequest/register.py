@@ -1,11 +1,11 @@
 import requests
 
-url = "http://15.165.161.150:8080/register"
+url = "http://13.125.250.202:8080/register"
 headers = {
     "Content-Type": "application/json"
 }
 data = {
-    "UserID": "testuser1",
+    "UserID": "testuser",
     "UserPW": "password123",
     "DbType": "mysql"
 }

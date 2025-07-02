@@ -39,7 +39,7 @@ func mysql_AllOpen(in interface{}) error {
 			defer cancel()
 			conn, err := mysql_Open(r.DB, &ctx)
 			if err != nil {
-				r.connQueue.PushQ(sql.DB{})
+				r.connQueue.PushQ(&sql.DB{})
 			} else {
 				r.Conn[index] = conn.(*sql.DB)
 				r.connQueue.PushQ(r.Conn[index])

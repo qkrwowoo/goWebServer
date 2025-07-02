@@ -95,7 +95,7 @@ func (r *rdb) GetDBConn(ctx *context.Context) (interface{}, error) {
 		c.Logging.Write(c.LogWARN, "DB Connection Broken[%s]... Try ReConnect ", err.Error())
 		temp, err = r.DB.Open(r.DB, ctx)
 		if err != nil {
-			r.connQueue.PushQ(sql.DB{})
+			r.connQueue.PushQ(&sql.DB{})
 			return nil, err
 		} else {
 			return temp, nil

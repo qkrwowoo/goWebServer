@@ -43,7 +43,7 @@ package db
 //			defer cancel()
 //			conn, err := oracle_Open(r.DB, &ctx)
 //			if err != nil {
-//				r.connQueue.PushQ(sql.DB{})
+//				r.connQueue.PushQ(&sql.DB{})
 //			} else {
 //				r.Conn[index] = conn.(*sql.DB)
 //				r.connQueue.PushQ(r.Conn[index])
