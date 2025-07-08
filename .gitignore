@@ -6,3 +6,5 @@ grpcWeb/grpcWeb
 output.log
 log/
 *.log
+goWeb/log/
+grpcWeb/log/
