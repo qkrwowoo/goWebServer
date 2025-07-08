@@ -1,4 +1,4 @@
-package grpcHandler
+package ginHandler
 
 import (
 	"context"
@@ -9,6 +9,16 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+/*
+*******************************************************************************************
+  - function	: UserInfo
+  - Description	: /user/... 라우팅
+  - Argument	: [ (*gin.Engine) gin Router 정보 ]
+  - Return		: [ ]
+  - Etc         :
+
+*******************************************************************************************
+*/
 func UserInfo(r *gin.Engine) {
 	user := r.Group("user")
 	{
@@ -17,6 +27,16 @@ func UserInfo(r *gin.Engine) {
 	}
 }
 
+/*
+*******************************************************************************************
+  - function	: Register
+  - Description	: 회원가입 API 호출
+  - Argument	: [ (*gin.Engine) gin Router 정보 ]
+  - Return		: [ ]
+  - Etc         :
+
+*******************************************************************************************
+*/
 func Register(r *gin.Engine) {
 	r.POST("/register", func(g *gin.Context) {
 		ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
@@ -60,7 +80,16 @@ func Register(r *gin.Engine) {
 	})
 }
 
-// 개인정보 조회할 때 사용자 인증용
+/*
+*******************************************************************************************
+  - function	: Login
+  - Description	: 로그인 API 호출
+  - Argument	: [ (*gin.Engine) gin Router 정보 ]
+  - Return		: [ ]
+  - Etc         :
+
+*******************************************************************************************
+*/
 func Login(r *gin.Engine) {
 	r.POST("/login", func(g *gin.Context) {
 		c.Logging.Write(c.LogTRACE, "[Login] Start")
@@ -101,6 +130,16 @@ func Login(r *gin.Engine) {
 	})
 }
 
+/*
+*******************************************************************************************
+  - function	: get_UserInfo
+  - Description	: 회원정보 조회 API 호출
+  - Argument	: [ (*gin.Engine) gin Router 정보 ]
+  - Return		: [ ]
+  - Etc         :
+
+*******************************************************************************************
+*/
 func get_UserInfo(g *gin.Context) {
 	c.Logging.Write(c.LogTRACE, "[GetUserInfo] Start")
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
@@ -135,6 +174,16 @@ func get_UserInfo(g *gin.Context) {
 	c.Logging.Write(c.LogTRACE, "[GetUserInfo] End")
 }
 
+/*
+*******************************************************************************************
+  - function	: update_UserInfo
+  - Description	: 회원정보 갱신 API 호출
+  - Argument	: [ (*gin.Engine) gin Router 정보 ]
+  - Return		: [ ]
+  - Etc         :
+
+*******************************************************************************************
+*/
 func update_UserInfo(g *gin.Context) {
 	c.Logging.Write(c.LogTRACE, "[UpdateUserInfo] Start")
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)

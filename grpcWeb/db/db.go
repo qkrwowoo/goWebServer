@@ -42,7 +42,7 @@ type column struct {
 	Type string
 }
 
-var RDB rdb
+var RDB rdbms
 var REDIS my_redis
 
 func init() {
@@ -50,6 +50,16 @@ func init() {
 	REDIS.Default()
 }
 
+/*
+*******************************************************************************************
+  - function	: (*DBinfo) init
+  - Description	: 사용 DB에 맞는 open 함수포인터를 지정
+  - Argument	: [ (string) DB타입 ]
+  - Return		: [ ]
+  - Etc         :
+
+*******************************************************************************************
+*/
 func (db *DBinfo) init(dbType string) {
 	db.Info.dbtype = strings.ToLower(dbType)
 	switch db.Info.dbtype {
@@ -66,10 +76,20 @@ func (db *DBinfo) init(dbType string) {
 		// 	db.Open = oracle_Open
 		// 	db.AllOpen = oracle_AllOpen
 	}
-	db.Info.init()
+	db.Info.LoadConfig()
 }
 
-func (cinfo *Conninfo) init() {
+/*
+*******************************************************************************************
+  - function	: (*Conninfo) LoadConfig
+  - Description	: 환경파일의 DB접속정보를 조회/갱신
+  - Argument	: [ ]
+  - Return		: [ ]
+  - Etc         :
+
+*******************************************************************************************
+*/
+func (cinfo *Conninfo) LoadConfig() {
 	if cinfo.dbtype == "redis" {
 		cinfo.ID = c.CFG["REDIS"]["ID"].(string)
 		cinfo.PW = c.CFG["REDIS"]["PW"].(string)

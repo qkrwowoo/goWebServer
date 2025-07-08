@@ -36,11 +36,9 @@ func init() {
 	signal.Notify(end_Signal, syscall.SIGTERM)
 }
 
+// MAIN  -------------------------------------------------------
 func main() {
-	var wg sync.WaitGroup
-	wg.Add(1)
-	checkArg(&wg)
-	wg.Wait()
+	checkArg()
 	time.Sleep(500 * time.Millisecond) // DB접속 완료까지 잠깐 대기
 
 	c.Logging.Write(c.LogALL, "=================================================")
@@ -59,6 +57,7 @@ func main() {
 	reflection.Register(grpcServer)
 	c.Logging.Write(c.LogALL, "\t ### Open gRPC Server")
 
+	var wg sync.WaitGroup
 	wg.Add(1)
 	if *s_ini != "" {
 		go check_Config(&wg)
@@ -71,7 +70,19 @@ func main() {
 	wg.Wait()
 }
 
-func checkArg(wg *sync.WaitGroup) string {
+/*
+*******************************************************************************************
+  - function	: checkArg
+  - Description	: 프로세스 초기 입력 검사.
+  - Argument	: [ ]
+  - Return		: [ ]
+  - Etc         : 환경파일 옵션 존재시 환경파일 조회
+
+*******************************************************************************************
+*/
+func checkArg() {
+	var wg sync.WaitGroup
+	wg.Add(1)
 	if *b_version {
 		var goVersion string
 		info, ok := debug.ReadBuildInfo()
@@ -89,7 +100,6 @@ func checkArg(wg *sync.WaitGroup) string {
 		os.Exit(0) // 버전 확인 후 종료
 	}
 
-	var port string
 	if *s_ini != "" {
 		err := c.Load_Config(*s_ini)
 		if err != nil {
@@ -109,12 +119,21 @@ func checkArg(wg *sync.WaitGroup) string {
 	if *s_port == "" {
 		*s_port = ":50051"
 	} else if (*s_port)[0] != ':' {
-		port = ":" + *s_port
+		*s_port = ":" + *s_port
 	}
 	wg.Done()
-	return port
 }
 
+/*
+*******************************************************************************************
+  - function	: init_config
+  - Description	: 환경파일 조회
+  - Argument	: [ ]
+  - Return		: [ ]
+  - Etc         :
+
+*******************************************************************************************
+*/
 func init_config() {
 	var encyn bool
 	if strings.ToLower(c.CFG["LOG"]["ENCYN"].(string)) == "y" {
@@ -136,6 +155,16 @@ func init_config() {
 	c.Logging.Print_Config(c.CFG)
 }
 
+/*
+*******************************************************************************************
+  - function	: check_Config
+  - Description	: 환경파일 변경 감지 확인 후 리로드
+  - Argument	: [ (*sync.WaitGroup) 고루틴 작업 대기 ]
+  - Return		: [ ]
+  - Etc         : 환경파일 옵션 존재시 환경파일 읽기
+
+*******************************************************************************************
+*/
 func check_Config(wg *sync.WaitGroup) {
 	ConfigInfo, _ := os.Stat(*s_ini)
 	lastCheckTime := ConfigInfo.ModTime()
@@ -161,6 +190,16 @@ func check_Config(wg *sync.WaitGroup) {
 	}
 }
 
+/*
+*******************************************************************************************
+  - function	: clearMem
+  - Description	: 메모리 자원 동적 해제
+  - Argument	: [ ]
+  - Return		: [ ]
+  - Etc         : 가비지컬렉션 있기에 하지않아도 되지만 명확하게 해제
+
+*******************************************************************************************
+*/
 func clearMem() {
 	db.RDB.AllClose()
 	db.REDIS.AllClose()

@@ -6,7 +6,6 @@ import (
 	"grpcWeb/db"
 	pb "grpcWeb/proto"
 	"grpcWeb/web"
-	"local/common"
 	c "local/common"
 	"time"
 )
@@ -15,7 +14,16 @@ type UserServer struct {
 	pb.UnimplementedUserServiceServer
 }
 
-// 회원가입
+/*
+*******************************************************************************************
+  - function	: Register
+  - Description	: 회원가입
+  - Argument	: [ (context.Conetxt) TIMEOUT설정, (*pb.RegisterRequest) gRPC 요청 ]
+  - Return		: [ (*pb.RegisterResponse) gRPC 응답, (error) 오류]
+  - Etc         :
+
+*******************************************************************************************
+*/
 func (s *UserServer) Register(ctx context.Context, req *pb.RegisterRequest) (*pb.RegisterResponse, error) {
 	c.Logging.Write(c.LogTRACE, "[Register] Start [%s]", req.UserId)
 
@@ -41,7 +49,16 @@ func (s *UserServer) Register(ctx context.Context, req *pb.RegisterRequest) (*pb
 	return &pb.RegisterResponse{Success: true, Message: msg}, nil
 }
 
-// 로그인
+/*
+*******************************************************************************************
+  - function	: Login
+  - Description	: 로그인
+  - Argument	: [ (context.Conetxt) TIMEOUT설정, (*pb.RegisterRequest) gRPC 요청 ]
+  - Return		: [ (*pb.RegisterResponse) gRPC 응답, (error) 오류]
+  - Etc         :
+
+*******************************************************************************************
+*/
 func (s *UserServer) Login(ctx context.Context, req *pb.LoginRequest) (*pb.LoginResponse, error) {
 	c.Logging.Write(c.LogTRACE, "[Login] Start [%s]", req.UserId)
 
@@ -71,7 +88,7 @@ func (s *UserServer) Login(ctx context.Context, req *pb.LoginRequest) (*pb.Login
 	// JWT 토큰 발급
 	token, _ := web.GenerateToken(req.UserId)
 	c.Logging.Write(c.LogDEBUG, "[Login] Make JWT Token [%.]", token)
-	query := fmt.Sprintf("SET %s %s", token, common.GetDateTime17())
+	query := fmt.Sprintf("SET %s %s", token, c.GetDateTime17())
 	_, err = db.REDIS.RedisDo(&ctx, query)
 	if err != nil {
 		c.Logging.Write(c.LogERROR, "[Login] Store JWT Token Error (Redis Err:%s)", err.Error())
@@ -88,7 +105,16 @@ func (s *UserServer) Login(ctx context.Context, req *pb.LoginRequest) (*pb.Login
 	return &pb.LoginResponse{Token: token, Message: "Login success"}, nil
 }
 
-// 사용자 정보 조회
+/*
+*******************************************************************************************
+  - function	: GetUserInfo
+  - Description	: 사용자 조회
+  - Argument	: [ (context.Conetxt) TIMEOUT설정, (*pb.RegisterRequest) gRPC 요청 ]
+  - Return		: [ (*pb.RegisterResponse) gRPC 응답, (error) 오류]
+  - Etc         :
+
+*******************************************************************************************
+*/
 func (s *UserServer) GetUserInfo(ctx context.Context, req *pb.UserInfoRequest) (*pb.UserInfoResponse, error) {
 	c.Logging.Write(c.LogTRACE, "[GetUserInfo] Start [%s]", req.UserId)
 
@@ -111,7 +137,16 @@ func (s *UserServer) GetUserInfo(ctx context.Context, req *pb.UserInfoRequest) (
 	//return &pb.UserInfoResponse{Status: true, LastLogin: lastLogin}, nil
 }
 
-// 사용자 정보 수정
+/*
+*******************************************************************************************
+  - function	: UpdateUserInfo
+  - Description	: 사용자 갱신
+  - Argument	: [ (context.Conetxt) TIMEOUT설정, (*pb.RegisterRequest) gRPC 요청 ]
+  - Return		: [ (*pb.RegisterResponse) gRPC 응답, (error) 오류]
+  - Etc         :
+
+*******************************************************************************************
+*/
 func (s *UserServer) UpdateUserInfo(ctx context.Context, req *pb.UpdateUserInfoRequest) (*pb.UpdateUserInfoResponse, error) {
 	c.Logging.Write(c.LogTRACE, "[UpdateUserInfo] Start [%s]", req.UserId)
 

@@ -11,16 +11,26 @@ import (
 	"time"
 )
 
-type rdb struct {
+type rdbms struct {
 	Mutex     sync.Mutex
 	connQueue c.Queue
 	Conn      []*sql.DB
 	DB        DBinfo
 }
 
-func (r *rdb) LoadConfig() {
+/*
+*******************************************************************************************
+  - function	: LoadConfig
+  - Description	: 환경파일 내부 RDBMS 연동 설정
+  - Argument	: [ ]
+  - Return		: [ ]
+  - Etc         :
+
+*******************************************************************************************
+*/
+func (r *rdbms) LoadConfig() {
 	r.AllClose()
-	r.DB.Info.init()
+	r.DB.Info.LoadConfig()
 	r.DB.init(c.CFG["DB"]["TYPE"].(string))
 	r.Conn = make([]*sql.DB, r.DB.Info.Thread)
 	if r.connQueue.V != nil && r.connQueue.V.Len() > 0 {
@@ -30,7 +40,17 @@ func (r *rdb) LoadConfig() {
 	r.DB.AllOpen(r)
 }
 
-func (r *rdb) Default(dbType string) {
+/*
+*******************************************************************************************
+  - function	: Default
+  - Description	: 기본(하드코딩) RDBMS 연동 설정
+  - Argument	: [ ]
+  - Return		: [ ]
+  - Etc         :
+
+*******************************************************************************************
+*/
+func (r *rdbms) Default(dbType string) {
 	r.DB.Info.dbtype = strings.ToLower(dbType)
 	switch r.DB.Info.dbtype {
 	// case "oracle", "godror":
@@ -70,7 +90,17 @@ func (r *rdb) Default(dbType string) {
 	r.DB.AllOpen(r)
 }
 
-func (r *rdb) AllClose() {
+/*
+*******************************************************************************************
+  - function	: AllClose
+  - Description	: RDBMS 전체 접속 해제
+  - Argument	: [ ]
+  - Return		: [ ]
+  - Etc         :
+
+*******************************************************************************************
+*/
+func (r *rdbms) AllClose() {
 	for i := 0; i < r.DB.Info.Thread; i++ {
 		if len(r.Conn) > i && r.Conn[i] != nil {
 			r.Conn[i].Close()
@@ -79,7 +109,19 @@ func (r *rdb) AllClose() {
 	}
 }
 
-func (r *rdb) GetDBConn(ctx *context.Context) (interface{}, error) {
+/*
+*******************************************************************************************
+  - function	: GetDBConn
+  - Description	: Connection 세션 조회
+  - Argument	: [ (*context.Context) TIMEOUT 설정 ]
+  - Return		: [ (interface{}) Redis Connection, (error) 오류 ]
+  - Etc         : Multi-Thread 기반일 때, 아직 회수되지 않은 Connection 사용 방지를 위하여
+    #             Queue 사용으로 유효한 Connection 사용 보장.
+    #             Connection 이 끊긴 경우, 재연결 시도.
+
+*******************************************************************************************
+*/
+func (r *rdbms) GetDBConn(ctx *context.Context) (interface{}, error) {
 	var temp interface{}
 	for {
 		if temp = r.connQueue.PopQ(); temp != nil {
@@ -105,7 +147,17 @@ func (r *rdb) GetDBConn(ctx *context.Context) (interface{}, error) {
 	}
 }
 
-func (r *rdb) Do(ctx *context.Context, query string) (table, error) {
+/*
+*******************************************************************************************
+  - function	: Do
+  - Description	: RDBMS 쿼리 수행
+  - Argument	: [ (*context.Context) TIMEOUT 설정, (string) Query문 ]
+  - Return		: [ (table) 결과 테이블, (error) 오류 ]
+  - Etc         :
+
+*******************************************************************************************
+*/
+func (r *rdbms) Do(ctx *context.Context, query string) (table, error) {
 	var conn interface{}
 	var err error
 	if conn, err = r.GetDBConn(ctx); conn == nil || err != nil {
@@ -125,7 +177,17 @@ func (r *rdb) Do(ctx *context.Context, query string) (table, error) {
 	}
 }
 
-func (db *rdb) Select(ctx *context.Context, query string, conn *sql.DB) (table, error) {
+/*
+*******************************************************************************************
+  - function	: Select
+  - Description	: Select 수행
+  - Argument	: [ (*context.Context) TIMEOUT 설정, (string) Query문, (*sql.DB) 커넥션 ]
+  - Return		: [ (table) 결과 테이블, (error) 오류 ]
+  - Etc         :
+
+*******************************************************************************************
+*/
+func (db *rdbms) Select(ctx *context.Context, query string, conn *sql.DB) (table, error) {
 	var retnTables table
 	var err error
 
@@ -186,7 +248,17 @@ func (db *rdb) Select(ctx *context.Context, query string, conn *sql.DB) (table, 
 	return retnTables, nil
 }
 
-func (db *rdb) Query(ctx *context.Context, query string, conn *sql.DB) (table, error) {
+/*
+*******************************************************************************************
+  - function	: Query
+  - Description	: Query 수행
+  - Argument	: [ (*context.Context) TIMEOUT 설정, (string) Query문, (*sql.DB) 커넥션 ]
+  - Return		: [ (table) 결과 테이블, (error) 오류 ]
+  - Etc         : insert, delete, update 를 수행.
+
+*******************************************************************************************
+*/
+func (db *rdbms) Query(ctx *context.Context, query string, conn *sql.DB) (table, error) {
 	var retnTables table
 	var err error
 
@@ -209,7 +281,6 @@ func (db *rdb) Query(ctx *context.Context, query string, conn *sql.DB) (table, e
 	}
 
 	lowerCmd := strings.ToLower(strings.Split(query, " ")[0])
-
 	ret, err := result_exce.RowsAffected()
 	if err != nil {
 		return table{}, err
@@ -221,6 +292,16 @@ func (db *rdb) Query(ctx *context.Context, query string, conn *sql.DB) (table, e
 	return retnTables, nil
 }
 
-func (db *rdb) Procedure(ctx *context.Context, query string, conn *sql.DB) (table, error) {
+/*
+*******************************************************************************************
+  - function	: Procedure
+  - Description	: Procedure 수행
+  - Argument	: [ (*context.Context) TIMEOUT 설정, (string) Query문, (*sql.DB) 커넥션 ]
+  - Return		: [ (table) 결과 테이블, (error) 오류 ]
+  - Etc         : 테스트환경에서의 RDBMS 구축이 아직이라 보류
+
+*******************************************************************************************
+*/
+func (db *rdbms) Procedure(ctx *context.Context, query string, conn *sql.DB) (table, error) {
 	return table{}, nil
 }

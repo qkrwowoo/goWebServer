@@ -22,6 +22,16 @@ type my_redis struct {
 	DB        DBinfo
 }
 
+/*
+*******************************************************************************************
+  - function	: LoadConfig
+  - Description	: 환경파일 내부 Redis 연동 설정
+  - Argument	: [ ]
+  - Return		: [ ]
+  - Etc         :
+
+*******************************************************************************************
+*/
 func (r *my_redis) LoadConfig() {
 	r.AllClose()
 	r.DB.init("redis")
@@ -33,6 +43,16 @@ func (r *my_redis) LoadConfig() {
 	r.DB.AllOpen(r)
 }
 
+/*
+*******************************************************************************************
+  - function	: Default
+  - Description	: 기본(하드코딩) Redis 연동 설정
+  - Argument	: [ ]
+  - Return		: [ ]
+  - Etc         :
+
+*******************************************************************************************
+*/
 func (r *my_redis) Default() {
 	r.DB.Info.dbtype = "redis"
 
@@ -56,6 +76,16 @@ func (r *my_redis) Default() {
 	r.DB.AllOpen(r)
 }
 
+/*
+*******************************************************************************************
+  - function	: redis_Open
+  - Description	: Redis 단일 접속
+  - Argument	: [ (DBinfo) DB연동정보, (*context.Context) TIMEOUT 설정 ]
+  - Return		: [ (interface{}) Redis Connection, (error) 오류 ]
+  - Etc         :
+
+*******************************************************************************************
+*/
 func redis_Open(db DBinfo, ctx *context.Context) (interface{}, error) {
 	var err error
 	redisNum, _ := strconv.Atoi(db.Info.SID)
@@ -73,6 +103,16 @@ func redis_Open(db DBinfo, ctx *context.Context) (interface{}, error) {
 	return redisConn, nil
 }
 
+/*
+*******************************************************************************************
+  - function	: redis_AllOpen
+  - Description	: Redis 전체 접속
+  - Argument	: [ (interface{}) DB연동정보 ]
+  - Return		: [ (error) 오류 ]
+  - Etc         : Thread 개수 만큼 동시 접속할 수 있는 Connection 생성
+
+*******************************************************************************************
+*/
 func redis_AllOpen(in interface{}) error {
 	r := in.(*my_redis)
 
@@ -97,6 +137,16 @@ func redis_AllOpen(in interface{}) error {
 	return nil
 }
 
+/*
+*******************************************************************************************
+  - function	: AllClose
+  - Description	: Redis 전체 접속 해제
+  - Argument	: [ ]
+  - Return		: [ ]
+  - Etc         :
+
+*******************************************************************************************
+*/
 func (r *my_redis) AllClose() {
 	for i := 0; i < r.DB.Info.Thread; i++ {
 		if len(r.Conn) > i && r.Conn[i] != nil {
@@ -106,6 +156,18 @@ func (r *my_redis) AllClose() {
 	}
 }
 
+/*
+*******************************************************************************************
+  - function	: GetDBConn
+  - Description	: Connection 세션 조회
+  - Argument	: [ (*context.Context) TIMEOUT 설정 ]
+  - Return		: [ (interface{}) Redis Connection, (error) 오류 ]
+  - Etc         : Multi-Thread 기반일 때, 아직 회수되지 않은 Connection 사용 방지를 위하여
+    #             Queue 사용으로 유효한 Connection 사용 보장.
+    #             Connection 이 끊긴 경우, 재연결 시도.
+
+*******************************************************************************************
+*/
 func (r *my_redis) GetDBConn(ctx *context.Context) (interface{}, error) {
 	var temp interface{}
 	for {
@@ -132,6 +194,16 @@ func (r *my_redis) GetDBConn(ctx *context.Context) (interface{}, error) {
 	}
 }
 
+/*
+*******************************************************************************************
+  - function	: RedisDo
+  - Description	: Redis Query 수행
+  - Argument	: [ (*context.Context) TIMEOUT 설정, (string) Query문 ]
+  - Return		: [ ([][]byte) Redis 응답, (error) 오류 ]
+  - Etc         : 응답값의 커스터마이징 상태.
+
+*******************************************************************************************
+*/
 func (r *my_redis) RedisDo(ctx *context.Context, redis_query string) ([][]byte, error) {
 	var expire time.Duration
 	var err error
@@ -587,6 +659,16 @@ func (r *my_redis) RedisDo(ctx *context.Context, redis_query string) ([][]byte, 
 	return PacketSetResponse(query, keys, vals)
 }
 
+/*
+*******************************************************************************************
+  - function	: PacketSetResponse
+  - Description	: Redis 응답값 커스터마이징 (command|key|key|key|value|value|value|value|value|value...)
+  - Argument	: [ ]
+  - Return		: [ ]
+  - Etc         :
+
+*******************************************************************************************
+*/
 func PacketSetResponse(query []string, keys []string, vals []string) ([][]byte, error) {
 	var lineBuff string
 	var retnBuff [][]byte

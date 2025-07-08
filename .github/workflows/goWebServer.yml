@@ -1,4 +1,4 @@
-name: goWeb
+name: goWebServer
 
 on:
   push:

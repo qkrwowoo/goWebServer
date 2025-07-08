@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"goWeb/ginHandler"
 	"goWeb/grpcHandler"
 	c "local/common"
 	"log"
@@ -38,14 +39,20 @@ func init() {
 	signal.Notify(end_Signal, syscall.SIGTERM)
 }
 
+// MAIN  -------------------------------------------------------
 func main() {
 	checkArg()
+	time.Sleep(500 * time.Millisecond)
 
 	grpcHandler.IPADDR = *s_ip + ":" + *s_port
 	c.Logging.Write(c.LogALL, "=================================================")
 	c.Logging.Write(c.LogALL, "\t [%s] START [%s]", os.Args[0], *s_listen)
 	c.Logging.Write(c.LogALL, "=================================================")
 	r := gin.Default()
+	//r.Use(gin.Logger())
+	r.Use(ginHandler.LoggerMiddleware())
+	r.Use(gin.Recovery())
+
 	if releaseMode {
 		gin.SetMode(gin.ReleaseMode)
 	}
@@ -56,9 +63,10 @@ func main() {
 	}
 	defer grpcHandler.Close_gRPC_Session()
 	time.Sleep(500 * time.Millisecond)
-	go grpcHandler.Register(r)
-	go grpcHandler.Login(r)
-	go grpcHandler.UserInfo(r)
+
+	go ginHandler.Register(r)
+	go ginHandler.Login(r)
+	go ginHandler.UserInfo(r)
 
 	var wg sync.WaitGroup
 	wg.Add(1)
@@ -72,7 +80,17 @@ func main() {
 	wg.Wait()
 }
 
-func checkArg() string {
+/*
+*******************************************************************************************
+  - function	: checkArg
+  - Description	: 프로세스 초기 입력 검사.
+  - Argument	: [ ]
+  - Return		: [ ]
+  - Etc         : 환경파일 옵션 존재시 환경파일 조회
+
+*******************************************************************************************
+*/
+func checkArg() {
 	if *b_version {
 		var goVersion string
 
@@ -112,10 +130,18 @@ func checkArg() string {
 	} else if (*s_listen)[0] != ':' {
 		*s_listen = ":" + *s_listen
 	}
-
-	return ""
 }
 
+/*
+*******************************************************************************************
+  - function	: init_config
+  - Description	: 환경파일 조회
+  - Argument	: [ ]
+  - Return		: [ ]
+  - Etc         :
+
+*******************************************************************************************
+*/
 func init_config() {
 	if mode := c.CFG["COMMON"]["PORT"].(string); mode == "DEV" {
 		releaseMode = false
@@ -147,6 +173,16 @@ func init_config() {
 	c.Logging.Print_Config(c.CFG)
 }
 
+/*
+*******************************************************************************************
+  - function	: check_Config
+  - Description	: 환경파일 변경 감지 확인 후 리로드
+  - Argument	: [ (*sync.WaitGroup) 고루틴 작업 대기 ]
+  - Return		: [ ]
+  - Etc         : 환경파일 옵션 존재시 환경파일 읽기
+
+*******************************************************************************************
+*/
 func check_Config(wg *sync.WaitGroup) {
 	ConfigInfo, _ := os.Stat(*s_ini)
 	lastCheckTime := ConfigInfo.ModTime()
