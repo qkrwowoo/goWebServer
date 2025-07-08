@@ -1,6 +1,7 @@
 # 개요
 
 Go & gRPC 를 활용한 RestAPI WebServer 기본 구조 구축 소스파일
+ - 기본 구조를 참조하여 다양한 서비스 확장이 가능하도록 구성
  - RestAPI 요청을 받아 gRPC 서버에 등록된 함수를 호출
  - MySQL, MsSQL, Oracle, Redis 기능 구현
  - 환경파일(goWeb.ini, grpcWeb.ini)을 활용한 데이터베이스 Destination 설정
